@@ -24,9 +24,7 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
 # Get the base version from the library.  (We'll find it in the `version.py`
 # file in the src directory, but we'll bypass actually loading up the library.)
 vspec = importlib.util.spec_from_file_location(
-  "version",
-  str(Path(__file__).resolve().parent /
-      "DH_chem_cli"/"version.py")
+    "version", str(Path(__file__).resolve().parent / "DH_chem_cli" / "version.py")
 )
 vmod = importlib.util.module_from_spec(vspec)
 vspec.loader.exec_module(vmod)
@@ -38,8 +36,8 @@ if os.getenv("buildnum") is not None:
     version = f"{version}.{os.getenv('buildnum')}"
 
 setup(
-    name='DH_chem_cli',
-    description="A cli to create and plot maximum down hole geochemicalelement maps.",
+    name="DH_chem_cli",
+    description="A cli to create and plot maximum down hole geochemical element maps.",
     long_description=long_description,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     version=version,
@@ -52,37 +50,34 @@ setup(
     DH_chem_cli=DH_chem_cli.cli:cli
     """,
     python_requires=">=0.0.2",
-    license='MIT',  # noqa
-    author='Rian Dutch',
-    author_email='riandutch@gmail.com',
+    license="MIT",  # noqa
+    author="Rian Dutch",
+    author_email="riandutch@gmail.com",
     # Use the URL to the github repo.
-    url= 'https://github.com/RADutchie/DH_chem_cli',
+    url="https://github.com/RADutchie/DH_chem_cli",
     download_url=(
-        f'https://github.com/RADutchie/'
-        f'DH_chem_cli/archive/{version}.tar.gz'
+        f"https://github.com/RADutchie/" f"DH_chem_cli/archive/{version}.tar.gz"
     ),
     keywords=[
         # Add package keywords here.
     ],
     # See https://PyPI.python.org/PyPI?%3Aaction=list_classifiers
     classifiers=[
-      # How mature is this project? Common values are
-      #   3 - Alpha
-      #   4 - Beta
-      #   5 - Production/Stable
-      "Development Status :: 3 - Alpha",
-
-      # Indicate who your project is intended for.
-      "Intended Audience :: Developers",
-      "Topic :: Software Development :: Libraries",
-
-      # Pick your license.  (It should match "license" above.)
+        # How mature is this project? Common values are
+        #   3 - Alpha
+        #   4 - Beta
+        #   5 - Production/Stable
+        "Development Status :: 3 - Alpha",
+        # Indicate who your project is intended for.
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries",
+        # Pick your license.  (It should match "license" above.)
         # noqa
-      """License :: OSI Approved :: MIT License""",
+        """License :: OSI Approved :: MIT License""",
         # noqa
-      # Specify the Python versions you support here. In particular, ensure
-      # that you indicate whether you support Python 2, Python 3 or both.
-      "Programming Language :: Python :: 3.8",
+        # Specify the Python versions you support here. In particular, ensure
+        # that you indicate whether you support Python 2, Python 3 or both.
+        "Programming Language :: Python :: 3.8",
     ],
-    include_package_data=True
+    include_package_data=True,
 )
