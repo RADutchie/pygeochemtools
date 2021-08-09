@@ -9,8 +9,8 @@ This is the test module for the project's command-line interface (CLI)
 module.
 """
 # fmt: off
-import DH_chem_cli.cli as cli
-from DH_chem_cli import __version__
+import pygeochemtools.cli as cli
+from pygeochemtools import __version__
 # fmt: on
 from click.testing import CliRunner, Result
 
@@ -51,6 +51,6 @@ def test_hello_displays_expected_message():
     runner: CliRunner = CliRunner()
     result: Result = runner.invoke(cli.cli, ["hello"])
     # fmt: off
-    assert 'DH_chem_cli' in result.output.strip(), \
+    assert 'pygeochemtools' in result.output.strip(), \
         "'Hello' messages should contain the CLI name."
     # fmt: on

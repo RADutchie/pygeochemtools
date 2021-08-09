@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-A cli to create and plot maximum down hole geochemicalelement maps.
+A cli to create and plot maximum down hole geochemical element maps.
 
-.. currentmodule:: DH_chem_cli
+.. currentmodule:: pygeochemtools
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 

@@ -1,1 +1,1 @@
-
+include pygeochemtools/data/*.csv

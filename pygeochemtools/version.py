@@ -4,7 +4,7 @@
 """
 This module contains project version information.
 
-.. currentmodule:: DH_chem_cli.version
+.. currentmodule:: pygeochemtools.version
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 

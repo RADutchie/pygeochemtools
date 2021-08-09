@@ -15,7 +15,7 @@ It can be used as a handy facility for running the task from a command line.
     To learn more about running Luigi, visit the Luigi project's
     `Read-The-Docs <http://luigi.readthedocs.io/en/stable/>`_ page.
 
-.. currentmodule:: DH_chem_cli.cli
+.. currentmodule:: pygeochemtools.cli
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 import logging
@@ -47,10 +47,12 @@ pass_info = click.make_pass_decorator(Info, ensure=True)
 # Change the options to below to suit the actual options for your task (or
 # tasks).
 @click.group()
-@click.option("--verbose", "-v", count=True, help="Enable verbose output.")
+@click.option(
+    "--verbose", "-v", count=True, help="Enable verbose output; 1 = less, 4 = more."
+)
 @pass_info
 def cli(info: Info, verbose: int):
-    """Run DH_chem_cli."""
+    """Run pygeochemtools."""
     # Use the verbosity count to determine the logging level...
     if verbose > 0:
         logging.basicConfig(
@@ -72,7 +74,7 @@ def cli(info: Info, verbose: int):
 @pass_info
 def hello(_: Info):
     """Say 'hello' to the nice people."""
-    click.echo("DH_chem_cli says 'hello'")
+    click.echo("pygeochemtools says 'hello'")
 
 
 @cli.command()

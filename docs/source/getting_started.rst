@@ -10,11 +10,13 @@ Getting Started
 Installing the Library
 ======================
 
-You can use pip to install `DH_chem_cli`.
+TODO Add installing requirements for Cartopy first. see https://github.com/PyPSA/PyPSA/issues/78
+
+You can use pip to install `pygeochemtools`.
 
 .. code-block:: sh
 
-    pip install DH_chem_cli
+    pip install pygeochemtools
 
 
 

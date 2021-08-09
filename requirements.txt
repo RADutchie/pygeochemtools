@@ -11,3 +11,9 @@ Sphinx
 sphinx-rtd-theme
 tox
 twine
+pandas==1.2.3
+numpy==1.19.5
+dask[dataframe]==2021.6.2
+cartopy==0.18.0
+matplotlib==3.3.4
+metpy==1.0

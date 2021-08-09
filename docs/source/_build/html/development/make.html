@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Using the Makefile &mdash; pygeochemtools 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Publishing the Package" href="publishing.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pygeochemtools
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../development.html">Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using the <cite>Makefile</cite></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#targets">Targets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#clean"><code class="docutils literal notranslate"><span class="pre">clean</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lint"><code class="docutils literal notranslate"><span class="pre">lint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#test"><code class="docutils literal notranslate"><span class="pre">test</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quicktest"><code class="docutils literal notranslate"><span class="pre">quicktest</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#docs"><code class="docutils literal notranslate"><span class="pre">docs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#answers"><code class="docutils literal notranslate"><span class="pre">answers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#package"><code class="docutils literal notranslate"><span class="pre">package</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#publish"><code class="docutils literal notranslate"><span class="pre">publish</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#build"><code class="docutils literal notranslate"><span class="pre">build</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#venv"><code class="docutils literal notranslate"><span class="pre">venv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#install"><code class="docutils literal notranslate"><span class="pre">install</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#licenses"><code class="docutils literal notranslate"><span class="pre">licenses</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="publishing.html">Publishing the Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs.html">Building the Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements.html">Dependencies</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pygeochemtools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../development.html">Development</a> &raquo;</li>
+        
+      <li>Using the <cite>Makefile</cite></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/development/make.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="toctree-wrapper compound" id="make">
+</div>
+<div class="section" id="using-the-makefile">
+<span id="id1"></span><h1>Using the <cite>Makefile</cite><a class="headerlink" href="#using-the-makefile" title="Permalink to this headline">¶</a></h1>
+<p>This project includes a <a class="reference external" href="https://www.gnu.org/software/make/">Makefile</a>
+that you can use to perform common tasks such as running tests and building
+documentation.</p>
+<div class="section" id="targets">
+<h2>Targets<a class="headerlink" href="#targets" title="Permalink to this headline">¶</a></h2>
+<p>This section contains a brief description of the targets defined in the
+<code class="docutils literal notranslate"><span class="pre">Makefile</span></code>.</p>
+<div class="section" id="clean">
+<h3><code class="docutils literal notranslate"><span class="pre">clean</span></code><a class="headerlink" href="#clean" title="Permalink to this headline">¶</a></h3>
+<p>Remove generated packages, documentation, temporary files, <em>etc</em>.</p>
+</div>
+<div class="section" id="lint">
+<span id="make-lint"></span><h3><code class="docutils literal notranslate"><span class="pre">lint</span></code><a class="headerlink" href="#lint" title="Permalink to this headline">¶</a></h3>
+<p>Run <a class="reference external" href="https://www.pylint.org/">pylint</a> against the project files.</p>
+</div>
+<div class="section" id="test">
+<span id="make-test"></span><h3><code class="docutils literal notranslate"><span class="pre">test</span></code><a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
+<p>Run the unit tests.</p>
+</div>
+<div class="section" id="quicktest">
+<h3><code class="docutils literal notranslate"><span class="pre">quicktest</span></code><a class="headerlink" href="#quicktest" title="Permalink to this headline">¶</a></h3>
+<p>Run the unit tests without performing pre-test validations (like
+<a class="reference internal" href="#make-lint"><span class="std std-ref">linting</span></a>).</p>
+</div>
+<div class="section" id="docs">
+<span id="make-docs"></span><h3><code class="docutils literal notranslate"><span class="pre">docs</span></code><a class="headerlink" href="#docs" title="Permalink to this headline">¶</a></h3>
+<p>Build the documentation for production.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can also build the documents directly, bypassing validations like
+<a class="reference internal" href="#make-lint"><span class="std std-ref">linting</span></a> and <a class="reference internal" href="#make-test"><span class="std std-ref">testing</span></a> using
+<a class="reference external" href="https://github.com/mapnik/sphinx-docs/blob/master/Makefile">Sphinx Makefile</a>
+directly.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> docs
+make clean <span class="o">&amp;&amp;</span> make html
+make latexpdf
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="answers">
+<span id="make-answers"></span><h3><code class="docutils literal notranslate"><span class="pre">answers</span></code><a class="headerlink" href="#answers" title="Permalink to this headline">¶</a></h3>
+<p>Perform a quick build of the documentation and open it in your browser.</p>
+</div>
+<div class="section" id="package">
+<h3><code class="docutils literal notranslate"><span class="pre">package</span></code><a class="headerlink" href="#package" title="Permalink to this headline">¶</a></h3>
+<p>Build the package for publishing.</p>
+</div>
+<div class="section" id="publish">
+<span id="make-publish"></span><h3><code class="docutils literal notranslate"><span class="pre">publish</span></code><a class="headerlink" href="#publish" title="Permalink to this headline">¶</a></h3>
+<p>Publish the package to your repository.</p>
+</div>
+<div class="section" id="build">
+<h3><code class="docutils literal notranslate"><span class="pre">build</span></code><a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h3>
+<p>Install the current project locally so that you may run the command-line application.</p>
+</div>
+<div class="section" id="venv">
+<h3><code class="docutils literal notranslate"><span class="pre">venv</span></code><a class="headerlink" href="#venv" title="Permalink to this headline">¶</a></h3>
+<p>Create a virtual environment.</p>
+</div>
+<div class="section" id="install">
+<h3><code class="docutils literal notranslate"><span class="pre">install</span></code><a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
+<p>Install (or update) project dependencies.</p>
+</div>
+<div class="section" id="licenses">
+<h3><code class="docutils literal notranslate"><span class="pre">licenses</span></code><a class="headerlink" href="#licenses" title="Permalink to this headline">¶</a></h3>
+<p>Generate a report of the projects dependencies and respective licenses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If project dependencies change, please update this documentation.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="publishing.html" class="btn btn-neutral float-right" title="Publishing the Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, RADutchie.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

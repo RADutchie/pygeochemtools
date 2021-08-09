@@ -1,10 +1,10 @@
-# DH_chem_cli
+# pygeochemtools
 
 A cli to create and plot maximum down hole geochemical element maps.
 
 ## Project Features
 
-* [DH_chem_cli](http://DH_chem_cli.readthedocs.io/)
+* [pygeochemtools](http://pygeochemtools.readthedocs.io/)
 * a starter [Click](http://click.pocoo.org/5/) command-line application
 * automated unit tests you can run with [pytest](https://docs.pytest.org/en/latest/)
 * a [Sphinx](http://www.sphinx-doc.org/en/master/) documentation project
@@ -12,7 +12,7 @@ A cli to create and plot maximum down hole geochemical element maps.
 ## Getting Started
 
 The project's documentation contains a section to help you
-[get started](https://DH_chem_cli.readthedocs.io/en/latest/getting_started.html) as a developer or
+[get started](https://pygeochemtools.readthedocs.io/en/latest/getting_started.html) as a developer or
 user of the library.
 
 ## Development Prerequisites
@@ -26,7 +26,7 @@ If you're going to be working in the code (rather than just using the library), 
 
 Below are some handy resource links.
 
-* [Project Documentation](http://DH_chem_cli.readthedocs.io/)
+* [Project Documentation](http://pygeochemtools.readthedocs.io/)
 * [Click](http://click.pocoo.org/5/) is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.
 * [Sphinx](http://www.sphinx-doc.org/en/master/) is a tool that makes it easy to create intelligent and beautiful documentation, written by Geog Brandl and licnsed under the BSD license.
 * [pytest](https://docs.pytest.org/en/latest/) helps you write better programs.
@@ -37,7 +37,7 @@ Below are some handy resource links.
 
 * **Rian Dutch** - *Initial work* - [github](https://github.com/RADutchie)
 
-See also the list of [contributors](https://github.com/RADutchie/DH_chem_cli/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/RADutchie/pygeochemtools/contributors) who participated in this project.
 
 ## LicenseMIT License
 

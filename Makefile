@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := build
 .PHONY: build publish package coverage test lint docs venv
-PROJ_SLUG = DH_chem_cli
-CLI_NAME = DH_chem_cli
+PROJ_SLUG = pygeochemtools
+CLI_NAME = pygeochemtools
 PY_VERSION = 3.8
 LINTER = flake8
 

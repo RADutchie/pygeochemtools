@@ -1,3 +1,3 @@
-name: DH_chem_cli
+name: pygeochemtools
 dependencies:
   - python=3.8

@@ -24,7 +24,7 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
 # Get the base version from the library.  (We'll find it in the `version.py`
 # file in the src directory, but we'll bypass actually loading up the library.)
 vspec = importlib.util.spec_from_file_location(
-    "version", str(Path(__file__).resolve().parent / "DH_chem_cli" / "version.py")
+    "version", str(Path(__file__).resolve().parent / "pygeochemtools" / "version.py")
 )
 vmod = importlib.util.module_from_spec(vspec)
 vspec.loader.exec_module(vmod)
@@ -36,7 +36,7 @@ if os.getenv("buildnum") is not None:
     version = f"{version}.{os.getenv('buildnum')}"
 
 setup(
-    name="DH_chem_cli",
+    name="pygeochemtools",
     description="A cli to create and plot maximum down hole geochemical element maps.",
     long_description=long_description,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
@@ -44,19 +44,20 @@ setup(
     install_requires=[
         # Include dependencies here
         "click>=7.0,<8"
+        "importlib_resources ; python_version<'3.7'"
     ],
     entry_points="""
     [console_scripts]
-    DH_chem_cli=DH_chem_cli.cli:cli
+    pygeochemtools=pygeochemtools.cli:cli
     """,
     python_requires=">=0.0.2",
     license="MIT",  # noqa
     author="Rian Dutch",
     author_email="riandutch@gmail.com",
     # Use the URL to the github repo.
-    url="https://github.com/RADutchie/DH_chem_cli",
+    url="https://github.com/RADutchie/pygeochemtools",
     download_url=(
-        f"https://github.com/RADutchie/" f"DH_chem_cli/archive/{version}.tar.gz"
+        f"https://github.com/RADutchie/" f"pygeochemtools/archive/{version}.tar.gz"
     ),
     keywords=[
         # Add package keywords here.

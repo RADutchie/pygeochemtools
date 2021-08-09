@@ -25,7 +25,7 @@ def test_import_getVersions_originalVersions():
     """
     assert (
         # fmt: off
-        # '0.0.1' == DH_chem_cli.__version__,
+        # '0.0.1' == pygeochemtools.__version__,
         # fmt: on
         "This test is expected to fail when the version increments. "
         "It is here only as an example and you can remove it."
