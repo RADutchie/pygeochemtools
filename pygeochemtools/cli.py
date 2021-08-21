@@ -19,8 +19,17 @@ It can be used as a handy facility for running the task from a command line.
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 import logging
+from pathlib import Path
+
 import click
-from .__init__ import __version__
+from click.termui import secho
+
+from .__init__ import (
+    __version__,
+    make_sarig_element_dataset,
+    plot_max_downhole_chem,
+)
+from .utils import config
 
 LOGGING_LEVELS = {
     0: logging.NOTSET,
@@ -48,11 +57,14 @@ pass_info = click.make_pass_decorator(Info, ensure=True)
 # tasks).
 @click.group()
 @click.option(
-    "--verbose", "-v", count=True, help="Enable verbose output; 1 = less, 4 = more."
+    "--verbose", "-v", count=True, help="Enable verbose output; 1 = less, 4 = more.",
 )
 @pass_info
 def cli(info: Info, verbose: int):
-    """Run pygeochemtools."""
+    """Run pygeochemtools.
+
+    An eclectic set of geochemical data manipulation tools.
+    """
     # Use the verbosity count to determine the logging level...
     if verbose > 0:
         logging.basicConfig(
@@ -72,12 +84,135 @@ def cli(info: Info, verbose: int):
 
 @cli.command()
 @pass_info
-def hello(_: Info):
-    """Say 'hello' to the nice people."""
-    click.echo("pygeochemtools says 'hello'")
+def show_config(_: Info):
+    """Display the user configuration."""
+    # configuration = config.config.__str__()
+    click.secho("COLUMN_NAMES", fg="blue", bold=True)
+    click.secho(config.column_names, fg="red")
+    click.secho("PLACES", fg="blue", bold=True)
+    click.secho(config.places, fg="red")
+    click.secho("EXTENT", fg="blue", bold=True)
+    click.secho(config.extent, fg="red")
+    click.secho("PROJECTION", fg="blue", bold=True)
+    click.secho(config.projection, fg="red")
+    click.secho("CRUSTAL_ABUND", fg="blue", bold=True)
+    click.secho(config.crustal_abund, fg="red")
+
+
+@cli.command()
+@pass_info
+def get_config_path(_: Info):
+    """Display path to user editable config.yml file."""
+    path = config.path
+    click.echo(path)
+
+
+@cli.command()
+@pass_info
+def edit_config(_: Info):
+    """Launch default editor to edit user configuration"""
+    path = config.path
+    click.edit(filename=path)
 
 
 @cli.command()
 def version():
     """Get the library version."""
     click.echo(click.style(f"{__version__}", bold=True))
+
+
+@cli.command()
+@pass_info
+@click.argument("path", type=click.Path(exists=True))
+@click.argument("element", type=str)
+@click.option(
+    "-t",
+    "--type",
+    type=click.Choice(["sarig", "gen"]),
+    help="Select input file structure",
+)
+@click.option(
+    "-e", "--export", default=True, help="Optional flag to turn-off file export"
+)
+@click.option(
+    "-o", "--out-path", help="Optional path to place output file, defaults to PATH",
+)
+def extract_element(_: Info, path, element, type, export, out_path):
+    """Extract single element dataset
+
+    Requires path to file and element to extract.
+    """
+    click.echo(f"Dataset structure set to {type}")
+    if type == "sarig":
+        make_sarig_element_dataset(
+            path=path, element=element, export=export, out_path=out_path
+        )
+
+    else:
+        click.echo(f"{type} not implemented yet")
+
+    if out_path:
+        click.echo(f"File written to {out_path}")
+    else:
+        click.echo(f"File written to {path}")
+
+
+@cli.command()
+@pass_info
+@click.argument("path", type=click.Path(exists=True))
+@click.argument("element", type=str)
+@click.option(
+    "-t",
+    "--plot-type",
+    type=click.Choice(["point", "interpolate"]),
+    help="Select map type",
+)
+@click.option(
+    "-s",
+    "--scale",
+    default=True,
+    help="Select either log-scale (default) or set to False for linear scale",
+)
+@click.option(
+    "-o",
+    "--out-path",
+    help="Optional path to place output file, defaults to current working directory",
+)
+@click.option(
+    "-i",
+    "--add-inset",
+    default=False,
+    help="Optional flag to add inset map with drillhole locations",
+)
+def plot_max_downhole(_: Info, path, element, plot_type, scale, out_path, add_inset):
+    """Plot maximum downhole geochemical values map
+
+    Requires path to data file and element.
+    """
+    click.echo(f"Map output set to {plot_type}")
+    if plot_type == "point":
+        plot_max_downhole_chem(
+            input_data=path,
+            element=element,
+            plot_type="point",
+            log_scale=scale,
+            out_path=out_path,
+            add_inset=add_inset,
+        )
+
+    elif plot_type == "interpolate":
+        plot_max_downhole_chem(
+            input_data=path,
+            element=element,
+            plot_type="interpolate",
+            log_scale=scale,
+            out_path=out_path,
+            add_inset=add_inset,
+        )
+    else:
+        click.echo(f"{plot_type} not implemented yet")
+
+    if out_path:
+        click.echo(f"File written to {out_path}")
+    else:
+        click.echo(f"File written to {Path.cwd()}")

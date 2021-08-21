@@ -66,7 +66,12 @@ sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.viewcode", "sphinx.ext.githubpages"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.napoleon",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -82,7 +87,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "pygeochemtools"
-copyright = "2019, Rian Dutch"
+copyright = "2021, Rian Dutch"
 author = "Rian Dutch"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -177,14 +182,22 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "pygeochemtools.tex", "pygeochemtools Documentation", "RADutchie", "manual",)
+    (
+        master_doc,
+        "pygeochemtools.tex",
+        "pygeochemtools Documentation",
+        "RADutchie",
+        "manual",
+    )
 ]
 
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "pygeochemtools", "pygeochemtools Documentation", [author], 1,)]
+man_pages = [
+    (master_doc, "pygeochemtools", "pygeochemtools Documentation", [author], 1,)
+]
 
 # -- Options for Texinfo output -------------------------------------------
 

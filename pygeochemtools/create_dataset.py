@@ -1,11 +1,15 @@
-"""Functions to load and filter input geochem data to a single element dataset"""
+"""Functions to load and filter input geochem data to a single element dataset
+
+.. currentmodule:: pygeochemtools.create_dataset
+.. moduleauthor:: Rian Dutch <riandutch@gmail.com>
+"""
 
 import dask.dataframe as dd
 import pandas as pd
 from pathlib import Path
 
 
-def clean_dataset(df: pd.DataFrame) -> pd.DataFrame:
+def clean_dataset(df: pd.DataFrame, value: str = "VALUE") -> pd.DataFrame:
     """Remove non-numeric characters.
 
     Clean non-numeric characters from dataframe and flag below detection
@@ -13,30 +17,34 @@ def clean_dataset(df: pd.DataFrame) -> pd.DataFrame:
 
     Args:
         df (pd.DataFrame): Input dataframe to clean.
+        value (str): Name of column containing geochemical data values.
+            Defaults to 'VALUE'.
 
     Returns:
         pd.DataFrame: Cleaned dataframe
     """
-    df.drop(df[df.VALUE.str.contains(r"-", na=False, regex=False)].index, inplace=True)
+    df.drop(df[df[value].str.contains(r"-", na=False, regex=False)].index, inplace=True)
 
     # create BDL/ODL flag and remove strings from values
     df["BDL"] = 0
-    df.loc[df["VALUE"].str.contains("<", na=False, regex=False), "BDL"] = 1
-    df.loc[df["VALUE"].str.contains(">", na=False, regex=False), "BDL"] = 2
-    df["VALUE"] = (
-        df["VALUE"].astype(str).str.replace(r"[<>]", "", regex=True).astype(float)
-    )
+    df.loc[df[value].str.contains("<", na=False, regex=False), "BDL"] = 1
+    df.loc[df[value].str.contains(">", na=False, regex=False), "BDL"] = 2
+    df[value] = df[value].astype(str).str.replace(r"[<>]", "", regex=True).astype(float)
 
     return df
 
 
-def convert_oxides(df: pd.DataFrame, element: str) -> pd.DataFrame:
+def convert_oxides(
+    df: pd.DataFrame, element: str, value: str = "VALUE"
+) -> pd.DataFrame:
     """Convert selected oxides to elements
 
     Args:
         df (pd.DataFrame): Input dataframe
         element (str): Oxide to convert. Can be any of:
-        'Fe2O3', 'FeO', 'U3O8', 'CoO', 'NiO'
+            'Fe2O3', 'FeO', 'U3O8', 'CoO', 'NiO'
+        value (str): Name of column containing geochemical data values.
+            Defaults to 'VALUE'.
 
     Returns:
         pd.DataFrame: Dataframe with oxides converted in place
@@ -44,40 +52,42 @@ def convert_oxides(df: pd.DataFrame, element: str) -> pd.DataFrame:
     df = df
 
     if element == "Fe2O3":
-        df["VALUE"] = df["VALUE"] / 1.4297
+        df[value] = df[value] / 1.4297
     elif element == "FeO":
-        df["VALUE"] = df["VALUE"] / 1.2865
+        df[value] = df[value] / 1.2865
     elif element == "U3O8":
-        df["VALUE"] = df["VALUE"] / 1.1792
+        df[value] = df[value] / 1.1792
     elif element == "CoO":
-        df["VALUE"] = df["VALUE"] / 1.2715
+        df[value] = df[value] / 1.2715
     elif element == "NiO":
-        df["VALUE"] = df["VALUE"] / 1.2725
+        df[value] = df[value] / 1.2725
     else:
         pass
 
     return df
 
 
-def convert_ppm(df: pd.DataFrame, element: str) -> pd.DataFrame:
+def convert_ppm(df: pd.DataFrame, element: str, value: str = "VALUE") -> pd.DataFrame:
     """Convert units to ppm, and below detection limit values to low, non-zero, values.
 
     Args:
         df (pd.DataFrame): Input dataframe
         element (str): Element
+        value (str): Name of column containing geochemical data values.
+            Defaults to 'VALUE'.
 
     Returns:
         pd.DataFrame: Dataframe with new 'converted_ppm' column
     """
     df = df
 
-    df["converted_ppm"] = df["VALUE"]
+    df["converted_ppm"] = df[value]
     df.loc[(df["UNIT"] == "%"), "converted_ppm"] = (
-        df.loc[(df["UNIT"] == "%"), "VALUE"] * 10000
+        df.loc[(df["UNIT"] == "%"), value] * 10000
     )
 
     df.loc[(df["UNIT"] == "ppb"), "converted_ppm"] = (
-        df.loc[(df["UNIT"] == "ppb"), "VALUE"] / 10000
+        df.loc[(df["UNIT"] == "ppb"), value] / 10000
     )
 
     # convert the BDL values to low but non-zero values
@@ -91,7 +101,7 @@ def convert_ppm(df: pd.DataFrame, element: str) -> pd.DataFrame:
     return df
 
 
-def add_chem_method(df: pd.DataFrame) -> pd.DataFrame:
+def add_sarig_chem_method(df: pd.DataFrame) -> pd.DataFrame:
     """Add normalised chem method columns to dataset.
 
     Function to map normalised chem method types onto the SARIG CHEM_METHOD_CODE column.
@@ -146,19 +156,19 @@ def export_dataset(
         Defaults to None
     """
     if out_path is None:
-        out_path = path
+        out_path = Path(path)
     else:
         out_path = Path(out_path)
 
-    out_file = out_path / f"{element}_processed.csv"
+    out_file = out_path.parent / f"{element}_processed.csv"
 
     df.to_csv(out_file, index=False)
 
 
 def load_sarig_element_dataset(path: str, element: str) -> pd.DataFrame:
     """Load data from csv and filter to single element dataframe.
-    
-    Creates a 'clean' single element dataset derived from the sarig_rs_chem_exp.csv.    
+
+    Creates a 'clean' single element dataset derived from the sarig_rs_chem_exp.csv.
     This isolates the selected element from the whole dataset and is used to create
     input data for further processing. This function uses dask to handle very large
     input datasets.
@@ -169,7 +179,7 @@ def load_sarig_element_dataset(path: str, element: str) -> pd.DataFrame:
     Args:
         path (str): Path to main sarig_rs_chem_exp.csv input file.
         element (str): The element to extract and create a sub-dataset of.
-        
+
     Returns:
         pd.DataFrame: Dataframe of single element data
     """
@@ -220,52 +230,3 @@ def load_sarig_element_dataset(path: str, element: str) -> pd.DataFrame:
     df = ddf[ddf.CHEM_CODE == element].compute()
 
     return df
-
-
-def make_sarig_element_dataset(
-    path: str, element: str, export: bool = False, out_path: str = None
-) -> pd.DataFrame:
-    """Create a 'clean' single element dataset derived from the sarig_rs_chem_exp.csv.
-       
-    This isolates the selected element from the whole dataset, converts BDL values to
-    a low, non zero value, drops rows that contain other symbols such as '>' and '-' and
-    converts oxides to elements and all values to ppm. It also adds chem methods to the
-    dataset where possible to allow further EDA.
-
-    This data is used to create input data for further processing. This function uses
-    dask to handle very large input datasets.
-
-    Important note: the the sarig_rs_chem_exp.csv data is in a long format, with each
-    individual analysis as a single row!
-
-    This dataset may need additional EDA and cleaning prior to further processing. In
-    that case set export to True to do further processing on the returned dataset.
-
-    Args:
-        path (str): Path to main sarig_rs_chem_exp.csv input file.
-        element (str): The element to extract and create a sub-dataset of.
-        export (bool): Wether to export a csv version of the element dataset.
-        Defaults to False.
-        out_path (str, optional): Path to place out put file. Defaults to path.
-
-    Returns:
-        pd.DataFrame: Dataframe of cleaned geochemical data
-    """
-    df = load_sarig_element_dataset(path, element=element)
-
-    df = clean_dataset(df)
-
-    df = convert_oxides(df, element=element)
-
-    df = convert_ppm(df, element=element)
-
-    df = add_chem_method(df)
-
-    if export:
-        export_dataset(df, element=element, path=path, out_path=out_path)
-
-    return df
-
-
-if __name__ == "__main__":
-    make_sarig_element_dataset()

@@ -1,0 +1,51 @@
+# User editable configuration data for global variables
+#
+# User editable column names to align with input files
+COLUMN_NAMES:
+  sample_no: SAMPLE_NO
+  drillhole_id: DRILLHOLE_NUMBER
+  drillhole_name: DRILLHOLE_NAME
+  depth_from: DH_DEPTH_FROM
+  depth_to: DH_DEPTH_TO
+  site_no: SITE_NO
+  longitude: LONGITUDE_GDA2020
+  latitude: LATITUDE_GDA2020
+  analysis_no: SAMPLE_ANALYSIS_NO
+  element: CHEM_CODE
+  value: VALUE
+  units: UNIT
+  converted_ppm: converted_ppm
+
+# Places for South Australia default map [lat, long, label]
+PLACES:
+  - [138.60, -34.9349, "Adelaide"]
+  - [133.66, -32.099, "Ceduna"]
+  - [137.77, -32.49, "Port Augusta"]
+  - [136.8, -31.2, "Woomera"]
+  - [134.75, -29.01, "Coober Pedy"]
+  - [132.04, -26.46, "Umuwa"]
+  - [139.55, -32.58, "Yunta"]
+  - [134.57, -30.71, "Tarcoola"]
+
+# Extent of South Australia default map (long: west, east; lat: north, south)
+EXTENT:
+  - 129.0
+  - 141.0
+  - -38.0
+  - -26.0
+
+# Projection to use on map, set to GDA 94 SA Lambert
+PROJECTION: 3107
+
+# Ave crustal abundance normalisations in ppm (Rudnick & Gao, 2004)
+CRUSTAL_ABUND:
+  Ag: 0.056
+  Au: 0.0013
+  Co: 26.6
+  Cu: 27.0
+  Fe: 67100.0
+  Li: 17.0
+  Ni: 59.0
+  Pb: 11.0
+  U: 1.3
+  Zn: 72.0
