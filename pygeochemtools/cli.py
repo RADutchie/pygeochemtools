@@ -20,9 +20,9 @@ It can be used as a handy facility for running the task from a command line.
 """
 import logging
 from pathlib import Path
+from pygeochemtools.main import plot_max_downhole_interval
 
 import click
-from click.termui import secho
 
 from .__init__ import (
     __version__,
@@ -53,8 +53,6 @@ class Info(object):
 pass_info = click.make_pass_decorator(Info, ensure=True)
 
 
-# Change the options to below to suit the actual options for your task (or
-# tasks).
 @click.group()
 @click.option(
     "--verbose", "-v", count=True, help="Enable verbose output; 1 = less, 4 = more.",
@@ -63,7 +61,7 @@ pass_info = click.make_pass_decorator(Info, ensure=True)
 def cli(info: Info, verbose: int):
     """Run pygeochemtools.
 
-    An eclectic set of geochemical data manipulation tools.
+    An eclectic set of geochemical data manipulation and plotting tools.
     """
     # Use the verbosity count to determine the logging level...
     if verbose > 0:
@@ -142,14 +140,14 @@ def extract_element(_: Info, path, element, type, export, out_path):
 
     Requires path to file and element to extract.
     """
-    click.echo(f"Dataset structure set to {type}")
+    click.secho(f"Dataset structure set to {type}", fg="blue")
     if type == "sarig":
         make_sarig_element_dataset(
             path=path, element=element, export=export, out_path=out_path
         )
 
     else:
-        click.echo(f"{type} not implemented yet")
+        click.secho(f"{type} not implemented yet", fg="red")
 
     if out_path:
         click.echo(f"File written to {out_path}")
@@ -189,7 +187,7 @@ def plot_max_downhole(_: Info, path, element, plot_type, scale, out_path, add_in
 
     Requires path to data file and element.
     """
-    click.echo(f"Map output set to {plot_type}")
+    click.secho(f"Map output set to {plot_type}", fg="blue")
     if plot_type == "point":
         plot_max_downhole_chem(
             input_data=path,
@@ -210,7 +208,74 @@ def plot_max_downhole(_: Info, path, element, plot_type, scale, out_path, add_in
             add_inset=add_inset,
         )
     else:
-        click.echo(f"{plot_type} not implemented yet")
+        click.secho(f"{plot_type} not implemented", fg="red")
+
+    if out_path:
+        click.echo(f"File written to {out_path}")
+    else:
+        click.echo(f"File written to {Path.cwd()}")
+
+
+@cli.command()
+@pass_info
+@click.argument("path", type=click.Path(exists=True))
+@click.argument("element", type=str)
+@click.argument("interval", type=int)
+@click.option(
+    "-t",
+    "--plot-type",
+    type=click.Choice(["point", "interpolate"]),
+    help="Select map type",
+)
+@click.option(
+    "-s",
+    "--scale",
+    default=True,
+    help="Select either log-scale (default) or set to False for linear scale",
+)
+@click.option(
+    "-o",
+    "--out-path",
+    help="Optional path to place output file, defaults to current working directory",
+)
+@click.option(
+    "-i",
+    "--add-inset",
+    default=False,
+    help="Optional flag to add inset map with drillhole locations",
+)
+def plot_max_downhole_intervals(
+    _: Info, path, element, interval, plot_type, scale, out_path, add_inset
+):
+    """Plot maximum downhole geochemical values map for each interval
+
+    Requires path to data file, element and interval. The interval should be in
+    whole meters as an integer.
+    """
+    click.secho(f"Map output set to {plot_type}", fg="blue")
+    if plot_type == "point":
+        plot_max_downhole_interval(
+            input_data=path,
+            element=element,
+            interval=interval,
+            plot_type="point",
+            log_scale=scale,
+            out_path=out_path,
+            add_inset=add_inset,
+        )
+
+    elif plot_type == "interpolate":
+        plot_max_downhole_interval(
+            input_data=path,
+            element=element,
+            interval=interval,
+            plot_type="interpolate",
+            log_scale=scale,
+            out_path=out_path,
+            add_inset=add_inset,
+        )
+    else:
+        click.secho(f"{plot_type} not implemented", fg="red")
 
     if out_path:
         click.echo(f"File written to {out_path}")
