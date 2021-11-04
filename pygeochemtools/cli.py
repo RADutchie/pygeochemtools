@@ -6,29 +6,18 @@ This is the entry point for the command-line interface (CLI) application.
 
 It can be used as a handy facility for running the task from a command line.
 
-.. note::
-
-    To learn more about Click visit the
-    `project website <http://click.pocoo.org/5/>`_.  There is also a very
-    helpful `tutorial video <https://www.youtube.com/watch?v=kNke39OZ2k0>`_.
-
-    To learn more about running Luigi, visit the Luigi project's
-    `Read-The-Docs <http://luigi.readthedocs.io/en/stable/>`_ page.
-
 .. currentmodule:: pygeochemtools.cli
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 import logging
+import os
 from pathlib import Path
-from pygeochemtools.main import plot_max_downhole_interval
 
 import click
 
-from .__init__ import (
-    __version__,
-    make_sarig_element_dataset,
-    plot_max_downhole_chem,
-)
+from .__init__ import __version__
+from .geochem import LoadAndFilter, make_sarig_element_dataset, sarig_long_to_wide
+from .map import plot_max_downhole_chem, plot_max_downhole_interval
 from .utils import config
 
 LOGGING_LEVELS = {
@@ -53,7 +42,15 @@ class Info(object):
 pass_info = click.make_pass_decorator(Info, ensure=True)
 
 
-@click.group()
+class NaturalOrderGroup(click.Group):
+    """Command group to list commands in the order given"""
+
+    def list_commands(self, ctx):
+        """List commands in the order given"""
+        return self.commands.keys()
+
+
+@click.group(cls=NaturalOrderGroup)
 @click.option(
     "--verbose", "-v", count=True, help="Enable verbose output; 1 = less, 4 = more.",
 )
@@ -61,7 +58,7 @@ pass_info = click.make_pass_decorator(Info, ensure=True)
 def cli(info: Info, verbose: int):
     """Run pygeochemtools.
 
-    An eclectic set of geochemical data manipulation and plotting tools.
+    An eclectic set of geochemical data manipulation, QC and plotting tools.
     """
     # Use the verbosity count to determine the logging level...
     if verbose > 0:
@@ -101,7 +98,7 @@ def show_config(_: Info):
 @pass_info
 def get_config_path(_: Info):
     """Display path to user editable config.yml file."""
-    path = config.path
+    path = config.path_to_config
     click.echo(path)
 
 
@@ -109,7 +106,7 @@ def get_config_path(_: Info):
 @pass_info
 def edit_config(_: Info):
     """Launch default editor to edit user configuration"""
-    path = config.path
+    path = config.path_to_config
     click.edit(filename=path)
 
 
@@ -121,33 +118,238 @@ def version():
 
 @cli.command()
 @pass_info
-@click.argument("path", type=click.Path(exists=True))
-@click.argument("element", type=str)
 @click.option(
     "-t",
     "--type",
+    "type_",
+    type=click.Choice(["sarig", "general"]),
+    help="Select input file structure",
+)
+@click.argument("path", type=click.Path(exists=True))
+def list_columns(_: Info, type_, path):
+    """Display the column headers in the loaded dataset"""
+    dataset = LoadAndFilter()
+    click.secho(f"Dataset structure set to {type_}", fg="blue")
+    if type_ == "sarig":
+        dataset.load_sarig_data(path)
+        click.secho(dataset.list_columns(), fg="blue")
+    else:
+        click.secho(f"{type_} not implemented yet", fg="red")
+
+
+@cli.command()
+@pass_info
+@click.option(
+    "-t",
+    "--type",
+    "type_",
     type=click.Choice(["sarig", "gen"]),
     help="Select input file structure",
 )
+@click.argument("path", type=click.Path(exists=True))
+def list_sample_types(_: Info, type_, path):
+    """Display the sample types listed in the sample type column
+    """
+    dataset = LoadAndFilter()
+    click.secho(f"Dataset structure set to {type_}", fg="blue")
+    if type_ == "sarig":
+        dataset.load_sarig_data(path)
+        click.secho(dataset.list_sample_types(), fg="blue")
+    else:
+        click.secho(f"{type_} not implemented yet", fg="red")
+
+
+@cli.command()
+@pass_info
 @click.option(
-    "-e", "--export", default=True, help="Optional flag to turn-off file export"
+    "-t",
+    "--type",
+    "type_",
+    type=click.Choice(["sarig", "gen"]),
+    help="Select input file structure",
+)
+@click.argument("path", type=click.Path(exists=True))
+def list_elements(_: Info, type_, path):
+    """Display the list of element labels in dataset
+    """
+    dataset = LoadAndFilter()
+    click.secho(f"Dataset structure set to {type_}", fg="blue")
+    if type_ == "sarig":
+        dataset.load_sarig_data(path)
+        click.secho(dataset.list_elements(), fg="blue")
+    else:
+        click.secho(f"{type_} not implemented yet", fg="red")
+
+
+@cli.command()
+@pass_info
+@click.argument("path", type=click.Path(exists=True))
+@click.option(
+    "-el",
+    "--elements",
+    type=str,
+    help="Enter a list of elements to filter to, or nothing",
+)
+@click.option(
+    "-st",
+    "--sample-type",
+    type=str,
+    help="Enter a list of sample types to filter to, or nothing",
+)
+@click.option(
+    "-dh",
+    "--drillholes",
+    type=str,
+    help="Enter a list of drillhole numbers to filter to, or Nothing",
+)
+@click.option(
+    "--dh-only", is_flag=True, help="Filter to only drillholes",
+)
+@click.option(
+    "--add-units", "include_units", is_flag=True, help="Include chem units",
+)
+@click.option(
+    "--add-methods",
+    "export_methods",
+    is_flag=True,
+    help="Export method metadata for the filtered samples",
 )
 @click.option(
     "-o", "--out-path", help="Optional path to place output file, defaults to PATH",
 )
-def extract_element(_: Info, path, element, type, export, out_path):
-    """Extract single element dataset
+def convert_long_to_wide(
+    _: Info,
+    path,
+    elements,
+    sample_type,
+    drillholes,
+    dh_only,
+    include_units,
+    export_methods,
+    out_path,
+):
+    """Convert sarig long form data to wide form.
 
-    Requires path to file and element to extract.
-    """
-    click.secho(f"Dataset structure set to {type}", fg="blue")
-    if type == "sarig":
-        make_sarig_element_dataset(
-            path=path, element=element, export=export, out_path=out_path
+    Requires path to sarig_rs_chem_exp file. You can filter this dataset down
+    to a managable size either by providing a list of elements, sample types
+    or drillhole numbers, or a combination of the three.
+
+    Will output a file called sarig_wide_data.csv to either the current working directory or
+    a directory specified with the -o option.
+
+    Optional flags:
+    --dh_only, will filter dataset to only include samples with a
+    drillhole_id.
+    --add-units, will include measurement units in the output file.
+    --add-methods, will export an additional file called sarig_wide_methods.csv
+    which will include the determination methods for each sample and analyte.
+
+    Note:
+    Elements, sample types and drillholes must be entered with a single ',' between
+    them and no spaces, e.g. Au,Cu,Pb.
+    Sample types which contain spaces must be enclosed in '' and typed exactly as
+    presented in the file, e.g. 'Drill core,Rock outcrop / float'
+
+    Example usage:
+    Filter data to just Cu and Au, only from drillholes and include the units:
+
+    `$ pygt convert-long-to-wide -el Cu,Au --inc-units --dh-only data/sarig_rs_chem_exp.csv`
+
+    Filter data to just Cu, Fe and Pb analytes, only from Drill core and Soil samples, and include both units and
+    export the methods as well:
+
+    `$ pygt convert-long-to-wide -el Cu,Fe,Pb -st 'Drill core,Soil' --inc-units --inc-methods data/sarig_rs_chem_exp.csv
+    """  # noqa: E501
+    # Convert click str input into list of str
+    if isinstance(elements, str):
+        elements = list(elements.split(","))
+
+    if isinstance(sample_type, str):
+        sample_type = list(sample_type.split(","))
+
+    if dh_only:
+        sarig_long_to_wide(
+            path=path,
+            elements=elements,
+            sample_type=sample_type,
+            drillholes=dh_only,
+            include_units=include_units,
+            export_methods=export_methods,
+            export=True,
+            out_path=out_path,
+        )
+    else:
+        if isinstance(drillholes, str):
+            # Convert click str input into list of int
+            drillholes = [int(i) for i in (list(drillholes.split(",")))]
+
+        sarig_long_to_wide(
+            path=path,
+            elements=elements,
+            sample_type=sample_type,
+            drillholes=drillholes,
+            include_units=include_units,
+            export_methods=export_methods,
+            export=True,
+            out_path=out_path,
         )
 
+    if out_path:
+        click.echo(f"File written to {out_path}")
     else:
-        click.secho(f"{type} not implemented yet", fg="red")
+        click.echo(f"File written to {os.getcwd()}")
+
+
+@cli.command()
+@pass_info
+@click.argument("path", type=click.Path(exists=True))
+@click.option(
+    "-el", "--element", type=str, multiple=True, help="Select one or more elements"
+)
+@click.option(
+    "--dh-only", is_flag=True, help="Filter to only drillholes",
+)
+@click.option(
+    "-t",
+    "--type",
+    "type_",
+    type=click.Choice(["sarig", "gen"]),
+    help="Select input file structure",
+)
+@click.option(
+    "-o", "--out-path", help="Optional path to place output file, defaults to PATH",
+)
+def extract_element(_: Info, path, element, dh_only, type_, out_path):
+    """Extract single element dataset(s)
+
+    Requires path to file and element to extract. You can extract multiple elements at
+    once by providing multiple element options.
+
+    Will output a file called 'element'_processed.csv to either the current working directory or
+    a directory specified with the -o option.
+
+    By selecting --dh_only, will filter dataset to only include samples with a
+    drillhole_id.
+
+    Example:
+    extract three element datasets from drillholes only from input datafile
+
+    `pygt extract-element /test_input.csv -el Au -el Cu -el Fe --dh-only -t sarig`
+    """  # noqa: E501
+    click.secho(f"Dataset structure set to {type_}", fg="blue")
+    if type_ == "sarig":
+        with click.progressbar(element) as bar:
+            for e in bar:
+                make_sarig_element_dataset(
+                    path=path,
+                    element=e,
+                    dh_only=dh_only,
+                    export=True,
+                    out_path=out_path,
+                )
+
+    else:
+        click.secho(f"{type_} not implemented yet", fg="red")
 
     if out_path:
         click.echo(f"File written to {out_path}")
@@ -185,7 +387,7 @@ def extract_element(_: Info, path, element, type, export, out_path):
 def plot_max_downhole(_: Info, path, element, plot_type, scale, out_path, add_inset):
     """Plot maximum downhole geochemical values map
 
-    Requires path to data file and element.
+    Requires path to extracted single element data file and element.
     """
     click.secho(f"Map output set to {plot_type}", fg="blue")
     if plot_type == "point":
@@ -249,8 +451,8 @@ def plot_max_downhole_intervals(
 ):
     """Plot maximum downhole geochemical values map for each interval
 
-    Requires path to data file, element and interval. The interval should be in
-    whole meters as an integer.
+    Requires path to extracted single element data file, element and interval. The
+    interval should be in whole meters as an integer.
     """
     click.secho(f"Map output set to {plot_type}", fg="blue")
     if plot_type == "point":

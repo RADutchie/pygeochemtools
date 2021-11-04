@@ -1,31 +1,32 @@
-"""Main high-level functions module
+"""Map generation and interpolation module
 
-.. currentmodule:: pygeochemtools.main
+.. currentmodule:: pygeochemtools.map
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
-
+import warnings
 from pathlib import Path
+from typing import Optional, Union
 
-import cartopy.crs as ccrs
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.colors import BoundaryNorm, LogNorm
 from scipy.spatial.qhull import QhullError
 
-from .aggregation import max_dh_chem, max_dh_chem_interval
-from .create_dataset import (
-    add_sarig_chem_method,
-    clean_dataset,
-    convert_oxides,
-    convert_ppm,
-    export_dataset,
-    load_sarig_element_dataset,
-)
-from .interpolate import interpolate
-from .normalisation import normalise_crustal_abundace
-from .plot import SA_base_map
-from .utils import config
+from ..geochem import max_dh_chem, max_dh_chem_interval, normalise_crustal_abundace
+from ..utils import config
+from .interpolate import interpolate  # noqa: F401
+from .map import SA_base_map  # noqa: F401
+
+try:
+    import cartopy.crs as ccrs
+except ModuleNotFoundError:
+    warnings.warn(
+        "Cartopy module required for plotting: https://scitools.org.uk/cartopy/docs/latest/installing.html#requirements",  # noqa: E501
+        ModuleNotFoundError,
+    )
+    pass
+
 
 # global var set from config.yml
 LONG = config.column_names["longitude"]
@@ -35,95 +36,51 @@ PPM = config.column_names["converted_ppm"]
 START_DEPTH = config.column_names["depth_from"]
 END_DEPTH = config.column_names["depth_to"]
 PROJECTION = config.projection
-
-
-def make_sarig_element_dataset(
-    path: str, element: str, export: bool = False, out_path: str = None
-) -> pd.DataFrame:
-    """Create a 'clean' single element dataset derived from the sarig_rs_chem_exp.csv.
-
-    This isolates the selected element from the whole dataset, converts BDL values to
-    a low, non zero value, drops rows that contain other symbols such as '>' and '-' and
-    converts oxides to elements and all values to ppm. It also adds chem methods to the
-    dataset where possible to allow further EDA.
-
-    This data is used to create input data for further processing. This function uses
-    dask to handle very large input datasets.
-
-    Important note: the the sarig_rs_chem_exp.csv data is in a long format, with each
-    individual analysis as a single row!
-
-    This dataset may need additional EDA and cleaning prior to further processing. In
-    that case set export to True to do further processing on the returned dataset.
-
-    Args:
-        path (str): Path to main sarig_rs_chem_exp.csv input file.
-        element (str): The element to extract and create a sub-dataset of.
-        export (bool): Wether to export a csv version of the element dataset.
-        Defaults to False.
-        out_path (str, optional): Path to place out put file. Defaults to path.
-
-    Returns:
-        pd.DataFrame: Dataframe of cleaned geochemical data
-    """
-    df = load_sarig_element_dataset(path, element=element)
-
-    df = clean_dataset(df)
-
-    df = convert_oxides(df, element=element)
-
-    df = convert_ppm(df, element=element)
-
-    df = add_sarig_chem_method(df)
-
-    if export:
-        export_dataset(df, element=element, path=path, out_path=out_path)
-
-    return df
+NORM_DATA = config.column_names["normalised_data"]
+PLACES = config.places
+EXTENT = config.extent
 
 
 def plot_max_downhole_chem(
-    input_data: str = None,
-    df: pd.DataFrame = None,
-    element: str = None,
+    input_data: Union[str, pd.DataFrame],
+    element: str,
     plot_type: str = "point",
     projection: int = PROJECTION,
     log_scale: bool = True,
-    out_path: str = None,
+    out_path: Optional[str] = None,
     add_inset: bool = False,
 ) -> None:
     """[summary]#TODO
 
     Args:
-        input_data (str, optional): [description]. Defaults to None.
-        df (pd.DataFrame, optional): [description]. Defaults to None.
-        element (str, optional): [description]. Defaults to None.
-        type (str, optional): [description]. Defaults to "point".
+        input_data (str, pd.DataFrame): [description].
+        element (str): [description].
+        plot_type (str, optional): [description]. Defaults to "point".
         projection (int, optional): [description]. Defaults to PROJECTION.
         log_scale (bool, optional): [description]. Defaults to True.
-        out_path (str, optional): [description]. Defaults to None.
+        out_path (str, optional): [description].
         add_inset (bool, optional): [description]. Defaults to False.
 
     Raises:
-        ValueError: [description]
+        ValueError: Ensure input_data is a valid CSV file.
     """
-    if input_data is not None:
+    if isinstance(input_data, str):
         path = Path(input_data)
         if path.is_file() and path.suffix == ".csv":
             df = pd.read_csv(path)
         else:
             raise ValueError("Ensure file is a valid .csv file")
     else:
-        df = df
+        df = input_data
 
-    df = max_dh_chem(processed_data=df, drillhole_id=DH_ID)
+    df = max_dh_chem(input_data=df, drillhole_id=DH_ID)
 
     df = normalise_crustal_abundace(df, element=element, ppm_column_name=PPM)
 
     # parameters
     max_v, min_v = (
-        df["Normalised_crustal_abund (ppm)"].max().astype(int),
-        df["Normalised_crustal_abund (ppm)"].min().astype(int),
+        df["Normalised_crustal_abund_(ppm)"].max().astype(int),
+        df["Normalised_crustal_abund_(ppm)"].min().astype(int),
     )
     levels = list(range(min_v, max_v, 1))
     cmap = plt.get_cmap("plasma")
@@ -166,12 +123,14 @@ def plot_max_downhole_chem(
             title=title,
             inset_title=inset_title,
             projection=projection,
+            places=PLACES,
+            extent=EXTENT,
             add_inset=add_inset,
         )
         plot = view.scatter(
             x,
             y,
-            c=df["Normalised_crustal_abund (ppm)"],
+            c=df["Normalised_crustal_abund_(ppm)"],
             cmap=cmap,
             norm=norm,
             alpha=0.6,
@@ -181,7 +140,9 @@ def plot_max_downhole_chem(
         title = f"Interpolated maximum down-hole {element} values"
 
         try:
-            gx, gy, img = interpolate(data=df, projection=projection)
+            gx, gy, img = interpolate(
+                data=df, long=LONG, lat=LAT, value=NORM_DATA, projection=projection
+            )
         except (QhullError, ZeroDivisionError):
             print("Interpolation error")
 
@@ -191,7 +152,7 @@ def plot_max_downhole_chem(
             projection=projection,
             add_inset=add_inset,
         )
-        plot = view.pcolormesh(gx, gy, img, cmap=cmap, norm=norm)  # TODO
+        plot = view.pcolormesh(gx, gy, img, cmap=cmap, norm=norm)
     else:
         print("Plot method not implemented")
         pass
@@ -204,7 +165,7 @@ def plot_max_downhole_chem(
         )
 
     if add_inset:
-        annot = f"Element concentration:\nmax: {max_val:.2f}ppm\nmean: {mean_val:.2f}ppm\nmin: {min_val:.2f}ppm"
+        annot = f"Element concentration:\nmax: {max_val:.2f}ppm\nmean: {mean_val:.2f}ppm\nmin: {min_val:.2f}ppm"  # noqa: E501
         view.annotate(text=annot, xy=(0.33, 0.09), xycoords="axes fraction")
         inset.plot(
             x,
@@ -220,14 +181,13 @@ def plot_max_downhole_chem(
 
 
 def plot_max_downhole_interval(
-    input_data: str = None,
-    df: pd.DataFrame = None,
-    element: str = None,
+    input_data: Union[str, pd.DataFrame],
+    element: str,
     interval: int = 10,
     plot_type: str = "point",
     projection: int = PROJECTION,
     log_scale: bool = True,
-    out_path: str = None,
+    out_path: Optional[str] = None,
     add_inset: bool = False,
 ) -> None:
     """[summary]#TODO
@@ -236,7 +196,8 @@ def plot_max_downhole_interval(
         input_data (str, optional): [description]. Defaults to None.
         df (pd.DataFrame, optional): [description]. Defaults to None.
         element (str, optional): [description]. Defaults to None.
-        interval (int, optional): [description]. Defaults to 10plot_type:str="point".
+        interval (int, optional): [description]. Defaults to 10.
+        plot_type:str="point".
         projection (int, optional): [description]. Defaults to PROJECTION.
         log_scale (bool, optional): [description]. Defaults to True.
         out_path (str, optional): [description]. Defaults to None.
@@ -245,14 +206,14 @@ def plot_max_downhole_interval(
     Raises:
         ValueError: [description]
     """
-    if input_data is not None:
+    if isinstance(input_data, str):
         path = Path(input_data)
         if path.is_file() and path.suffix == ".csv":
             df = pd.read_csv(path)
         else:
             raise ValueError("Ensure file is a valid .csv file")
     else:
-        df = df
+        df = input_data
 
     df = max_dh_chem_interval(
         processed_data=df,
@@ -274,8 +235,8 @@ def plot_max_downhole_interval(
 
             # parameters
             max_v, min_v = (
-                group["Normalised_crustal_abund (ppm)"].max(),
-                group["Normalised_crustal_abund (ppm)"].min(),
+                group["Normalised_crustal_abund_(ppm)"].max(),
+                group["Normalised_crustal_abund_(ppm)"].min(),
             )
 
             levels = list(range(int(min_v), int(max_v), 1))
@@ -323,21 +284,29 @@ def plot_max_downhole_interval(
                     title=title,
                     inset_title=inset_title,
                     projection=projection,
+                    places=PLACES,
+                    extent=EXTENT,
                     add_inset=add_inset,
                 )
                 plot = view.scatter(
                     x,
                     y,
-                    c=group["Normalised_crustal_abund (ppm)"],
+                    c=group["Normalised_crustal_abund_(ppm)"],
                     cmap=cmap,
                     norm=norm,
                     alpha=0.6,
                     transform=ccrs.PlateCarree(),
                 )
             elif plot_type == "interpolate":
-                title = f"Interpolated maximum down-hole {element} values at {name}m interval"
+                title = f"Interpolated maximum down-hole {element} values at {name}m interval"  # noqa: E501
                 try:
-                    gx, gy, img = interpolate(data=group, projection=projection)
+                    gx, gy, img = interpolate(
+                        data=group,
+                        long=LONG,
+                        lat=LAT,
+                        value=NORM_DATA,
+                        projection=projection,
+                    )
                 except (QhullError, ZeroDivisionError):
                     print("Interpolation error, skipping")
                     continue
@@ -360,7 +329,7 @@ def plot_max_downhole_interval(
                 )
 
             if add_inset:
-                annot = f"Element concentration:\nmax: {max_val:.2f}ppm\nmean: {mean_val:.2f}ppm\nmin: {min_val:.2f}ppm"
+                annot = f"Element concentration:\nmax: {max_val:.2f}ppm\nmean: {mean_val:.2f}ppm\nmin: {min_val:.2f}ppm"  # noqa: E501
                 view.annotate(text=annot, xy=(0.33, 0.09), xycoords="axes fraction")
                 inset.plot(
                     x,

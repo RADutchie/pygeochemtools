@@ -1,6 +1,6 @@
 # pygeochemtools
 
-A cli to create and plot maximum down hole geochemical element maps.
+A CLI based eclectic set of geochemical data manipulation, QC and plotting tools.
 
 ## Project Features
 

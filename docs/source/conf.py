@@ -44,18 +44,19 @@ class Mock(MagicMock):
         return MagicMock()
 
 
-MOCK_MODULES = [
+""" MOCK_MODULES = [
     "numpy",
     "scipy",
     "sklearn",
     "matplotlib",
     "matplotlib.pyplot",
+    "matplotlib.colors",
     "scipy.interpolate",
-    "scipy.special",
+    "scipy.spatial",
+    "scipy.spatial.qhull",
     "math",
-    "pandas",
 ]
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES) """
 
 # -- General configuration ------------------------------------------------
 
@@ -73,6 +74,17 @@ extensions = [
     "sphinx.ext.napoleon",
 ]
 
+autodoc_mock_imports = [
+    "pandas",
+    "dask",
+    "metpy",
+    "cartopy",
+    "matplotlib",
+    "scipy",
+    "numpy",
+]
+
+autodoc_default_options = {"undoc-members": False}
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 

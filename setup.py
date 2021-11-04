@@ -24,7 +24,7 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
 # Get the base version from the library.  (We'll find it in the `version.py`
 # file in the src directory, but we'll bypass actually loading up the library.)
 vspec = importlib.util.spec_from_file_location(
-    "version", str(Path(__file__).resolve().parent / "pygeochemtools" / "version.py")
+    "version", str(Path(__file__).resolve().parent / "pygeochemtools" / "_version.py")
 )
 vmod = importlib.util.module_from_spec(vspec)
 vspec.loader.exec_module(vmod)
@@ -37,7 +37,7 @@ if os.getenv("buildnum") is not None:
 
 setup(
     name="pygeochemtools",
-    description="A cli to create and plot maximum down hole geochemical element maps.",
+    description="An eclectic set of geochemical data manipulation, QC and plotting tools.",
     long_description=long_description,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     version=version,
@@ -48,7 +48,7 @@ setup(
     ],
     entry_points="""
     [console_scripts]
-    pygeochemtools=pygeochemtools.cli:cli
+    pygt=pygeochemtools.cli:cli
     """,
     python_requires=">=0.0.2",
     license="MIT",  # noqa

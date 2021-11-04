@@ -7,38 +7,37 @@
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from typing import Union
 
 
 def max_dh_chem(
-    processed_data: pd.DataFrame = None,
-    input_data: str = None,
-    drillhole_id: str = "DRILLHOLE_NUMBER",
+    input_data: Union[str, pd.DataFrame], drillhole_id: str
 ) -> pd.DataFrame:
     """Function to aggregate the processed elemental geochemical data and
     return a dataframe containing max value in each drillhole.
 
+    Requires long format data.
+
     Args:
-        processed_data (pd.DataFrame): Pandas dataframe of clean and processed
-            single element dataset. Defaults to None.
-        input_data (str): Path to clean and processed single element dataset
-            in csv format. Defaults to None.
-        drillhole_id (str): drillhole identifier in dataset. Defaults to
-            'DRILLHOLE_NUMBER'.
+        input_data (Union[str, pd.DataFrame]): Path to clean and processed single
+            element dataset in csv format or Pandas dataframe of clean and processed
+            single element dataset.
+        drillhole_id (str): drillhole identifier in dataset.
 
     Raises:
         ValueError: [description]
 
     Returns:
-        pd.DataFrame: Dataframe containing only the maximum value from each drill hole.
+        pd.DataFrame: Dataframe containing only the maximum value from each drill hole
     """
-    if input_data is not None:
+    if isinstance(input_data, str):
         path = Path(input_data)
         if path.is_file() and path.suffix == ".csv":
             df = pd.read_csv(path)
         else:
             raise ValueError("Ensure file is a valid .csv file")
     else:
-        df = processed_data
+        df = input_data
 
     df_max = df.loc[df.groupby([drillhole_id])["converted_ppm"].idxmax()]
 
@@ -46,24 +45,24 @@ def max_dh_chem(
 
 
 def max_dh_chem_interval(
-    processed_data: pd.DataFrame = None,
-    input_data: str = None,
-    interval: int = 10,
-    drillhole_id: str = "DRILLHOLE_NUMBER",
-    start_depth_label: str = "DH_DEPTH_TO",
-    end_depth_label: str = "DH_DEPTH_FROM",
+    input_data: Union[str, pd.DataFrame],
+    interval: int,
+    drillhole_id: str,
+    start_depth_label: str,
+    end_depth_label: str,
 ) -> pd.DataFrame:
     """Function to aggregate the processed elemental geochemical data and
     return a dataframe containing max value in each interval down hole for each
-    drillhole.
+    drillhole. # TODO finish docs
+
+    Requires long format data.
 
     Args:
-        processed_data (pd.DataFrame, optional): [description]. Defaults to None.
-        input_data (str, optional): [description]. Defaults to None.
-        interval (int, optional): [description]. Defaults to 10.
-        drillhole_id (str, optional): [description]. Defaults to "DRILLHOLE_NUMBER".
-        start_depth_label (str, optional): [description]. Defaults to "DH_DEPTH_TO".
-        end_depth_label (str, optional): [description]. Defaults to "DH_DEPTH_FROM".
+        input_data (Union[str, pd.DataFrame]): [description]
+        interval (int): [description]
+        drillhole_id (str): [description]
+        start_depth_label (str): [description]
+        end_depth_label (str): [description]
 
     Raises:
         ValueError: [description]
@@ -72,14 +71,14 @@ def max_dh_chem_interval(
         pd.DataFrame: [description]
     """
 
-    if input_data is not None:
+    if isinstance(input_data, str):
         path = Path(input_data)
         if path.is_file() and path.suffix == ".csv":
             df = pd.read_csv(path)
         else:
             raise ValueError("Ensure file is a valid .csv file")
     else:
-        df = processed_data
+        df = input_data
 
     # calculate median to-from depth
     df["median_depth"] = df[[start_depth_label, end_depth_label]].apply(

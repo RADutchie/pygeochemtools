@@ -4,39 +4,41 @@
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 
+import warnings
 from typing import List, Union
 
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
-import cartopy.mpl as cmpl
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-from ..utils import config
-
-# global var set from config.yml
-PLACES = config.places
-EXTENT = config.extent
+try:
+    import cartopy.crs as ccrs
+    import cartopy.feature as cfeature
+    import cartopy.mpl as cmpl
+except ModuleNotFoundError:
+    warnings.warn(
+        "Cartopy module required for map plotting: https://scitools.org.uk/cartopy/docs/latest/installing.html#requirements",  # noqa: E501
+        ModuleNotFoundError,
+    )
+    pass
 
 
 def SA_base_map(
     title: str,
     inset_title: str,
     projection: int,
+    extent: List[int],
+    places: List[List[Union[float, float, str]]],
     add_inset=True,
-    extent: List[int] = EXTENT,
-    places: List[List[Union[float, float, str]]] = PLACES,
 ) -> plt.figure:
-    """Create default map for plotting. #TODO
+    """Create default map for plotting.
 
     Args:
         title (str): [description]
         inset_title (str): [description]
-        projection (int, optional): [description]. Defaults to 3107.
+        projection (int, optional): [description].
         add_inset (bool, optional): [description]. Defaults to True.
-        extent (list[int], optional): [description]. Defaults to EXTENT.
+        extent (list[int], optional): [description].
         places (list[list[float, float, str]], optional): [description].
-            Defaults to PLACES.
 
     Returns:
         tuple containing

@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa: F401
 
 """
-A cli to create and plot maximum down hole geochemical element maps.
+An eclectic set of geochemical data manipulation, QC and plotting tools.
 
 .. currentmodule:: pygeochemtools
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 
-from .version import __version__, __release__  # noqa
-from .main import (
-    make_sarig_element_dataset,
-    plot_max_downhole_chem,
-    plot_max_downhole_interval,
-)  # noqa
+from ._version import __version__, __release__

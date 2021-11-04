@@ -1,4 +1,4 @@
-DH_chem_cli
+pygeochemtools
 attrs
 attrs
 certifi
@@ -43,7 +43,8 @@ snowballstemmer
 sphinx-rtd-theme
 sphinxcontrib-websupport
 tornado
-tox tqdm
+tox
+tqdm
 twine
 urllib3
 wrapt
