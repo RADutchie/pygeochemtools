@@ -28,7 +28,7 @@ def interpolate(
     projection: int,
     interp_type: str = "natural_neighbor",
     hres: float = 10000,
-    **kwargs: dict
+    **kwargs: dict,
 ) -> np.array:
     """Wrapper for the metpy interpolate_to_grid function. # noqa: D401, E501
 

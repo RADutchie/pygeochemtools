@@ -1,10 +1,11 @@
-.. _using_the_CLI:
 
 .. toctree::
     :glob:
 
+.. _using_the_CLI:
+
 *********************************
-Using the Command line interface
+Using the command line interface
 *********************************
 
 Introduction

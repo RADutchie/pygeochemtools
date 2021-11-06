@@ -1,7 +1,8 @@
-.. _getting_started:
 
 .. toctree::
     :glob:
+
+.. _getting_started:
 
 ***************
 Getting Started

@@ -5,8 +5,10 @@
 """
 
 import importlib.resources as pkg_resources
-import yaml
 import os
+
+import yaml
+
 from .. import data
 from ..utils import app_logger
 

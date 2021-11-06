@@ -42,7 +42,7 @@ answers:
 	xdg-open docs/build/html/index.html
 
 package: clean docs
-	python setup.py sdist
+	python -m build
 
 publish: package
 	twine upload dist/*
@@ -56,7 +56,6 @@ clean :
 venv :
 
 	virtualenv --python python$(PY_VERSION) venv
-
 
 
 install:

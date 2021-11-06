@@ -1,10 +1,11 @@
-.. _getting_started_dev:
 
 .. toctree::
     :glob:
 
+.. _development:
+
 ***************
-Getting Started
+Contributing
 ***************
 
 This section provides instructions for setting up your development environment.  If you follow the
@@ -20,7 +21,7 @@ You can use `git clone` to get it.
 
 .. code-block:: bash
 
-   git clone https://github.com/patdaburu/bnrml
+   git clone https://github.com/RADutchie/pygeochemtools
 
 Create the Virtual Environment
 ==============================
@@ -32,6 +33,12 @@ You can create a virtual environment and install the project's dependencies usin
     make venv
     make install
     source venv/bin/activate
+
+If you are using Anaconda environments
+
+.. code-block:: bash
+
+    conda create --name <env_name> python=3.8
 
 Try It Out
 ==========

@@ -4,7 +4,7 @@
 Dependencies
 ************
 
-The ``requirements.txt`` file contains this project's module dependencies.
+The ``requirements.txt`` file contains this project's full module dependencies.
 You can install these dependencies using ``pip``.
 
 .. code-block:: bash

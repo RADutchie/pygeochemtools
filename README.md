@@ -1,19 +1,27 @@
 # pygeochemtools
 
-A CLI based eclectic set of geochemical data manipulation, QC and plotting tools.
+A CLI based eclectic set of geochemical data manipulation, QC and plotting tools.*
+
+*Pygeochemtools* is a python library and command line interface tool to enable rapid manipulation, filtering, QC and plotting
+of geochemical data. It is primarily designed to allow people with limited or no coding experience to deal with
+very large datasets when programs like Excel will struggle. It is designed to natively load and manipulate the geochemical datasets output by the Geological Survey of South Australia, but will easily handle other datasets with a little bit of configuration in later updates.
+
+For more information checkout the [pygeochemtools](http://pygeochemtools.readthedocs.io/) documentation
 
 ## Project Features
 
-* [pygeochemtools](http://pygeochemtools.readthedocs.io/)
-* a starter [Click](http://click.pocoo.org/5/) command-line application
-* automated unit tests you can run with [pytest](https://docs.pytest.org/en/latest/)
-* a [Sphinx](http://www.sphinx-doc.org/en/master/) documentation project
+Currently *pygeochemtools* provides the following functionality:
+   * Filter large datasets based on a list of elements, sample type or drillhole numbers (or a combination of all three) and convert from long to wide format.
+   * Add detailed geochemical methods columns onto the SARIG geochemical dataset.
+   * Extract single element datasets from large geochemical datasets.
+   * Plot maximum down hole geochemical data maps.
+   * Plot maximum down hole chemistry per interval geochemical data maps.
 
 ## Getting Started
 
 The project's documentation contains a section to help you
-[get started](https://pygeochemtools.readthedocs.io/en/latest/getting_started.html) as a developer or
-user of the library.
+[get started](https://pygeochemtools.readthedocs.io/en/latest/getting_started.html) as a user or
+developer of the library.
 
 ## Development Prerequisites
 

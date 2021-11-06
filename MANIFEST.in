@@ -1,1 +1,1 @@
-include pygeochemtools/data/*.csv
+recursive-include pygeochemtools/data/ *.csv *.yml

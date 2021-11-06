@@ -80,14 +80,15 @@ def test_sarig_long_to_wide(mock_csv_path, i1, i2, expected, request, tmp_path):
     assert res == expected
 
 
+"""
 def test_sarig_long_to_wide_methods(
     mock_csv_path, mock_wide_methods_expected, request, tmp_path
 ):
     """
-    Arrange: Load test and expected dataframes.
-    Act: Run sarig_long_to_wide().
-    Assert: return equals expected_df.
-    """
+# Arrange: Load test and expected dataframes.
+# Act: Run sarig_long_to_wide().
+# Assert: return equals expected_df.
+"""
     path = str(mock_csv_path)
     temp = str(tmp_path)
     expected = request.getfixturevalue(mock_wide_methods_expected)
@@ -101,3 +102,4 @@ def test_sarig_long_to_wide_methods(
     with open(expected, "r") as r:
         expected = r.read()
     assert res == expected
+"""
