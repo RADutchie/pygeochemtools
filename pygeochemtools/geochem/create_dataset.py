@@ -254,7 +254,7 @@ class LoadAndFilter:
 
         Raises:
         MemoryError: If filtered dataset is still too large to fit in avaliable memory.
-        
+
         Returns:
             pd.DataFrame: Dataframe containing only those samples belonging to the
                 listed sample types
