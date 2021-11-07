@@ -11,13 +11,47 @@ Getting Started
 Installing the Library
 ======================
 
-TODO Add installing requirements for Cartopy first. see https://github.com/PyPSA/PyPSA/issues/78
+You can use pip to install ``pygeochemtools`` into a new virtual environment.
 
-You can use pip to install `pygeochemtools`.
-
-.. code-block:: sh
+.. code-block:: bash
 
     pip install pygeochemtools
 
+.. note::
+    pygeochemtools is not packaged for Anaconda, so ``conda install pygeochemtools`` wont work.
 
+Optional dependencies
+----------------------
+
+``pygeochemtools`` requires `Cartopy <https://scitools.org.uk/cartopy/docs/latest/index.html>`_ in order to plot maps.
+``Cartopy`` requires some additional dependencies to be able to run and so is not automatically installed with the above command.
+
+To install ``pygeochemtools`` with map plotting functionality, first install the ``Cartopy`` dependencies GEOS, Shapely and PROJ.
+See the ``Cartopy`` `installation guide <https://scitools.org.uk/cartopy/docs/latest/installing.html>`_ for details on how to do this.
+
+You can then install ``pygeochemtools``, including ``Cartopy`` with pip.
+
+.. code-block:: bash
+
+    pip install pygeochemtools[cartopy]
+
+Alternatively, if you use Anaconda, you can install Cartopy using conda.
+
+.. code-block:: bash
+
+    conda install -c conda-forge cartopy
+
+Building from source
+---------------------
+
+If you want to build ``pygeochemtools`` from source you can clone the source files from `github <https://github.com/RADutchie/pygeochemtools>`_
+and build a local installation into a new virtual environment.
+
+.. code-block:: bash
+
+    git clone https://github.com/RADutchie/pygeochemtools.git
+    cd pygeochemtools
+    python -m pip install .
+
+.. seealso:: :ref:`Development <development>` to install a local development version
 

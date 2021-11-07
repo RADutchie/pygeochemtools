@@ -15,18 +15,21 @@ from ..utils import app_logger
 logger = app_logger.get_logger(__name__)
 
 
-class _Config:
-    """Load user configuration object
-    """
+class Config:
+    """Load user configuration object"""
 
     def __init__(self) -> None:
-        """User config
-        """
+        """Store and load user config"""
         self._config = None
         self.get_config()
 
     def get_config(self):
-        """Read config in from config.yml"""
+        """Read config.
+
+        Loads user config from either the default_config.yml file or the
+        user provided config.yml file. Config file located in the
+        pygeochemtools.data module
+        """
         try:
             # read config and store in _config
             with pkg_resources.open_text(data, "config.yml") as c:
@@ -41,27 +44,33 @@ class _Config:
 
     @property
     def column_names(self):
+        """Return configured column names"""
         return self._config["COLUMN_NAMES"]
 
     @property
     def places(self):
+        """Return configured place names and coordinates"""
         return self._config["PLACES"]
 
     @property
     def extent(self):
+        """Return configured map extent"""
         return self._config["EXTENT"]
 
     @property
     def projection(self):
+        """Return configured map projection"""
         return self._config["PROJECTION"]
 
     @property
     def crustal_abund(self):
+        """Return configured crustal abundance values"""
         return self._config["CRUSTAL_ABUND"]
 
     @property
     def path_to_config(self):
+        """Return path to configuration file"""
         return os.path.join(data.__path__[0], "config.yml")
 
 
-config = _Config()
+config = Config()

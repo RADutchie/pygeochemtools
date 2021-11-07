@@ -12,6 +12,11 @@ _log_format = "%(asctime)s - [%(levelname)s] - %(name)s - (%(filename)s).%(funcN
 
 
 def get_file_handler():
+    """Log file handler.
+
+    Returns:
+        FileHandler: Log FileHandler object.
+    """
     file_handler = logging.FileHandler("x.log")
     file_handler.setLevel(logging.WARNING)
     file_handler.setFormatter(logging.Formatter(_log_format))
@@ -19,13 +24,26 @@ def get_file_handler():
 
 
 def get_stream_handler():
+    """Log stream handler.
+
+    Returns:
+        TextIO: Log StreamHandler object
+    """
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(logging.INFO)
     stream_handler.setFormatter(logging.Formatter(_log_format))
     return stream_handler
 
 
-def get_logger(name):
+def get_logger(name: str):
+    """Get logger call.
+
+    Args:
+        name (str): Module name
+
+    Returns:
+        Logger: Return Logger object
+    """
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
     logger.addHandler(get_file_handler())

@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := build
-.PHONY: build publish package coverage test lint docs venv
+.PHONY: build publish package coverage test lint docs venv format
 PROJ_SLUG = pygeochemtools
 CLI_NAME = pygeochemtools
 PY_VERSION = 3.8
@@ -35,13 +35,15 @@ docs: coverage
 	mkdir -p docs/source/_static
 	mkdir -p docs/source/_templates
 	cd docs && $(MAKE) html
-	
+
+format:
+	black $(CLI_NAME)
 
 answers:
 	cd docs && $(MAKE) html
 	xdg-open docs/build/html/index.html
 
-package: clean docs
+package: clean format docs
 	python -m build
 
 publish: package

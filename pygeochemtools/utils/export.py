@@ -12,14 +12,14 @@ import pandas as pd
 def export_dataset(
     df: pd.DataFrame, label: str, path: str = None, out_path: str = None
 ) -> None:
-    """Export element dataset
+    """Export DataFrame to csv dataset.
 
     Args:
-        df (pd.DataFrame): Dataframe to export
-        element (str): Name of element in dataset
-        path (str): Input file location
+        df (pd.DataFrame): Dataframe to export.
+        label (str): Output file name label.
+        path (str): Input file location.
         out_path (str): File location to export to, if different from import path.
-        Defaults to None
+            Defaults to None
     """
     if out_path is None:
         out_path = Path(path).parent

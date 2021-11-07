@@ -51,14 +51,21 @@ def clean_dataset(
 
 
 def handle_BDL(df: pd.DataFrame, units: str) -> pd.DataFrame:
-    """[summary]#TODO compete docs
+    """Convert below detection limit values to low, non-zero values.
+
+    Converts non-numeric values like "<10" to low numeric ppm values. All BDL units
+    are converted to a value of 0.001ppm except ppb values which are converted to
+    0.00001ppm.
+
+    Requires clean_dataset() function to be run to create the "BDL" flag column first.
 
     Args:
-        df (pd.DataFrame): [description]
-        units (str): [description].
+        df (pd.DataFrame): Input dataframe to clean.
+        units (str): Name of the units column headder in df.
 
     Returns:
-        pd.DataFrame: [description]
+        pd.DataFrame: DataFrame with BDL values converted to low ppm values in the
+            "converted_ppm" column.
     """
     # convert the BDL values to low but non-zero values
     df = df
@@ -161,27 +168,24 @@ class LoadAndFilter:
         self.loaded = True
 
     def load_chem_data(self, path: str) -> None:
-        """[summary]
+        """Not implemented yet. Func to load generic datasets.
 
         Args:
-            path (str): [description]
+            path (str): Path to input csv file.
         """
         pass
 
     def list_columns(self):
-        """Return the column headers from the dataset
-        """
+        """Return the column headers from the dataset"""
         return self.ddf.columns
 
     def list_sample_types(self):
-        """Return a list of sample types in the dataset
-        """
+        """Return a list of sample types in the dataset"""
         SAMPLE_TYPE = config.column_names["sample_type"]
         return self.ddf[SAMPLE_TYPE].unique().compute()
 
     def list_elements(self):
-        """Return a list of elements in the dataset
-        """
+        """Return a list of elements in the dataset"""
         ELEMENT = config.column_names["element"]
         return list(self.ddf[ELEMENT].unique().compute())
 
@@ -232,7 +236,11 @@ class LoadAndFilter:
         elements: Optional[List[str]] = None,
         drillholes: Optional[Union[List[int], bool]] = None,
     ) -> pd.DataFrame:
-        """Filter dataset based on sample types listed in SAMPLE_TYPE column #TODO complete
+        """Filter sarig dataset.
+
+        Reduce the size of the sarig_rs_chem_exp.csv dataset by filtering samples based
+        on a list of elements, sample types and/or drillhole numbers, or a combination
+        of all three.
 
 
         Args:
@@ -244,6 +252,9 @@ class LoadAndFilter:
                 drillhole numbers to filter to, or True to filter dataset to just
                 those samples from drillholes. Defaults to None.
 
+        Raises:
+        MemoryError: If filtered dataset is still too large to fit in avaliable memory.
+        
         Returns:
             pd.DataFrame: Dataframe containing only those samples belonging to the
                 listed sample types
@@ -263,25 +274,6 @@ class LoadAndFilter:
 
         try:
             return ddf_.compute()
-        except MemoryError:
-            print(
-                "Ran into a MemoryError, your dataset is probably still too big to \
-                fit in your avaliable memory"
-            )
-
-    def sarig_filter_elements(self, elements: List[str]) -> pd.DataFrame:
-        """Filter dataset based on specified elements listed in CHEM_CODE column
-
-        Args:
-            elements (List[str]): List of elements to include
-
-        Returns:
-            pd.DataFrame: Dataframe containing only those rows belonging to the
-                listed elements for each sample.
-        """
-        ddf_ = self.ddf
-        try:
-            return ddf_[ddf_["CHEM_CODE"].isin(elements)].compute()
         except MemoryError:
             print(
                 "Ran into a MemoryError, your dataset is probably still too big to \

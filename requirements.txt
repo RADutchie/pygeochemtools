@@ -1,4 +1,4 @@
-click
+click==8.0.1
 pip-check-reqs
 pip-licenses
 flake8
@@ -6,14 +6,17 @@ flake8-docstrings
 pytest
 pytest-cov
 pytest-pythonpath
-setuptools
+setuptools>=50
 Sphinx
 sphinx-rtd-theme
 tox
 twine
+black
 pandas==1.2.3
 numpy==1.20.3
 dask==2021.6.2
 cartopy==0.19.0.post1
 matplotlib==3.3.4
 metpy==1.0
+PyYAML
+importlib-resources==5.2.2

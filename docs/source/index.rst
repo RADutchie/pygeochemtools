@@ -62,7 +62,6 @@ and the :ref:`examples` page to see how to use pygeochemtools.
    
    development/getting_started
    development/make
-   development/publishing
    development/docs
    
 

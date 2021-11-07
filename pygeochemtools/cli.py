@@ -4,8 +4,6 @@
 """
 This is the entry point for the command-line interface (CLI) application.
 
-It can be used as a handy facility for running the task from a command line.
-
 .. currentmodule:: pygeochemtools.cli
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
@@ -148,8 +146,7 @@ def list_columns(_: Info, type_, path):
 )
 @click.argument("path", type=click.Path(exists=True))
 def list_sample_types(_: Info, type_, path):
-    """Display the sample types listed in the sample type column
-    """
+    """Display the sample types listed in the sample type column"""
     dataset = LoadAndFilter()
     click.secho(f"Dataset structure set to {type_}", fg="blue")
     if type_ == "sarig":
@@ -170,8 +167,7 @@ def list_sample_types(_: Info, type_, path):
 )
 @click.argument("path", type=click.Path(exists=True))
 def list_elements(_: Info, type_, path):
-    """Display the list of element labels in dataset
-    """
+    """Display the list of element labels in dataset"""
     dataset = LoadAndFilter()
     click.secho(f"Dataset structure set to {type_}", fg="blue")
     if type_ == "sarig":
@@ -258,7 +254,7 @@ def convert_long_to_wide(
     Filter data to just Cu, Fe and Pb analytes, only from Drill core and Soil samples, and include both units and
     export the methods as well:
 
-    `$ pygt convert-long-to-wide -el Cu,Fe,Pb -st 'Drill core,Soil' --inc-units --inc-methods data/sarig_rs_chem_exp.csv
+    `$ pygt convert-long-to-wide -el Cu,Fe,Pb -st 'Drill core,Soil' --inc-units --inc-methods data/sarig_rs_chem_exp.csv`
     """  # noqa: E501
     # Convert click str input into list of str
     if isinstance(elements, str):

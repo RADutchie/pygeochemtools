@@ -1,12 +1,12 @@
-.. _make:
 
 .. toctree::
     :glob:
 
 .. _using-the-makefile:
+.. _make:
 
-Using the `Makefile`
-====================
+Using the ``Makefile``
+=======================
 
 This project includes a `Makefile <https://www.gnu.org/software/make/>`_
 that you can use to perform common tasks such as running tests and building
@@ -29,6 +29,11 @@ Remove generated packages, documentation, temporary files, *etc*.
 ^^^^^^^^
 
 Run `pylint <https://www.pylint.org/>`_ against the project files.
+
+``format``
+^^^^^^^^^^
+
+Run the `black <https://black.readthedocs.io/en/stable/index.html>`_ code formatter against project files.
 
 .. _make_test:
 
@@ -102,6 +107,3 @@ Install (or update) project dependencies.
 
 Generate a report of the projects dependencies and respective licenses.
 
-.. note::
-
-    If project dependencies change, please update this documentation.

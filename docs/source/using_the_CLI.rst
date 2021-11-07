@@ -13,11 +13,6 @@ Introduction
 
 TODO talk about the CLI
 
-You can use pip to install `pygeochemtools`.
-
-.. code-block:: sh
-
-    pip install pygeochemtools
 
 Edit user config
 ================

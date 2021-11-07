@@ -5,9 +5,6 @@ pygeochemtools.utils
    :members:
    :show-inheritance:
 
-Submodules
-----------
-
 pygeochemtools.utils.app\_logger
 --------------------------------
 

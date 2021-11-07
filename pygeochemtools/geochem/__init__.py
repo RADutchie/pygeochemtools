@@ -92,20 +92,27 @@ def sarig_long_to_wide(
 ) -> pd.DataFrame:
     """Convert sarig long form data to wide form.
 
+    Takes optional list of elements, sample types or drillhole numbers and filters
+    large dataset based on these inputs. Has the option to include or exclude units
+    with the values. Can also export an additional methods file.
+
     Args:
-        path (str): [description]
-        elements (Optional[List[str]]): [description]
-        sample_type (Optional[List[str]]): [description]
-        drillholes (Optional[Union[List[int], bool]]): [description]
-        include_units (bool): [description]
-        export_methods (bool): [description]
-        export (bool): [description]
-        out_path (Optional[str]): [description]
+        path (str): Path to main sarig_rs_chem_exp.csv input file.
+        elements (Optional[List[str]]): List of elements to filter dataset to.
+        sample_type (Optional[List[str]]): List of sample types to filter dataset to.
+        drillholes (Optional[Union[List[int], bool]]): List of drillhole numbers to
+            filter dataset to.
+        include_units (bool): Option to include units in the data export. Defaults
+            to False.
+        export_methods (bool): Option to include methods file in the data export.
+            Defaults to False.
+        export (bool): Option to export data to a csv file. Defaults to False
+        out_path (Optional[str]): Optional path to output export file location.
+            Defaults to path.
 
     Returns:
         pd.DataFrame: [description]
     """
-    # TODO add conversion long to wide with el and sample selection and output
     dataset = LoadAndFilter()
     dataset.load_sarig_data(path)
 

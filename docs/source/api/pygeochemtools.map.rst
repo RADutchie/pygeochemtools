@@ -6,9 +6,6 @@ pygeochemtools.map
    :undoc-members:
    :show-inheritance:
 
-Submodules
-----------
-
 pygeochemtools.map.interpolate
 ------------------------------
 

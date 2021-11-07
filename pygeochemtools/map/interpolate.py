@@ -1,4 +1,4 @@
-"""Map generation and interpolation module
+"""Data interpolation module
 
 .. currentmodule:: pygeochemtools.interpolate
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
@@ -53,8 +53,7 @@ def interpolate(
     Returns:
         gx ((N,2) ndarray): Meshgrid for the resulting interpolation in the x dimension
         gy ((N,2) ndarray): Meshgrid for the resulting interpolation in the y dimension
-        gx ((M,N) ndarray): 2-dimensional array representing the interpolated values
-            for each grid.
+        gx ((M,N) ndarray): 2-dimensional array representing the interpolated values for each grid.
     """
     x, y, data = (
         data[long].values,

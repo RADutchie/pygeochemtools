@@ -6,9 +6,6 @@ pygeochemtools.geochem
    :undoc-members:
    :show-inheritance:
 
-Submodules
-----------
-
 pygeochemtools.geochem.aggregation
 ----------------------------------
 

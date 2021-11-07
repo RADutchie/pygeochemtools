@@ -1,4 +1,4 @@
-"""Map generation and plotting module
+"""Base map creation functions
 
 .. currentmodule:: pygeochemtools.plot.map
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>

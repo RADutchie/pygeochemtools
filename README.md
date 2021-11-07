@@ -1,12 +1,12 @@
 # pygeochemtools
 
-A CLI based eclectic set of geochemical data manipulation, QC and plotting tools.*
+*A CLI based eclectic set of geochemical data manipulation, QC and plotting tools.*
 
 *Pygeochemtools* is a python library and command line interface tool to enable rapid manipulation, filtering, QC and plotting
 of geochemical data. It is primarily designed to allow people with limited or no coding experience to deal with
 very large datasets when programs like Excel will struggle. It is designed to natively load and manipulate the geochemical datasets output by the Geological Survey of South Australia, but will easily handle other datasets with a little bit of configuration in later updates.
 
-For more information checkout the [pygeochemtools](http://pygeochemtools.readthedocs.io/) documentation
+For more information checkout the [pygeochemtools](http://pygeochemtools.readthedocs.io/) documentation.
 
 ## Project Features
 

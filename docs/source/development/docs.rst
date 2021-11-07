@@ -17,7 +17,7 @@ from `reStructuredTex <http://docutils.sourceforge.net/rst.html>`_.
 Ubuntu/Debian
 -------------
 
-This project started on `Ubuntu Linux 18.04 <http://releases.ubuntu.com/18.04/>`_.
+This project started on `Ubuntu Linux 20.04 <https://releases.ubuntu.com/focal/>`_.
 That doesn't mean you can't use another distribution, or even another operating
 system, but you may need to perform some additional setup steps to get your
 builds working.  (If you do get it working under another system, please consider
