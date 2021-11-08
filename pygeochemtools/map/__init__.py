@@ -5,7 +5,7 @@
 """
 import warnings
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -46,6 +46,8 @@ def plot_max_downhole_chem(
     element: str,
     plot_type: str = "point",
     projection: int = PROJECTION,
+    extent: List[int] = EXTENT,
+    places: List[List[Union[float, float, str]]] = PLACES,
     log_scale: bool = True,
     out_path: Optional[str] = None,
     add_inset: bool = False,
@@ -151,6 +153,8 @@ def plot_max_downhole_chem(
             inset_title=inset_title,
             projection=projection,
             add_inset=add_inset,
+            extent=extent,
+            places=places,
         )
         plot = view.pcolormesh(gx, gy, img, cmap=cmap, norm=norm)
     else:
@@ -186,6 +190,8 @@ def plot_max_downhole_interval(
     interval: int = 10,
     plot_type: str = "point",
     projection: int = PROJECTION,
+    extent: List[int] = EXTENT,
+    places: List[List[Union[float, float, str]]] = PLACES,
     log_scale: bool = True,
     out_path: Optional[str] = None,
     add_inset: bool = False,
@@ -284,8 +290,8 @@ def plot_max_downhole_interval(
                     title=title,
                     inset_title=inset_title,
                     projection=projection,
-                    places=PLACES,
-                    extent=EXTENT,
+                    places=places,
+                    extent=extent,
                     add_inset=add_inset,
                 )
                 plot = view.scatter(
@@ -314,6 +320,8 @@ def plot_max_downhole_interval(
                     title=title,
                     inset_title=inset_title,
                     projection=projection,
+                    places=places,
+                    extent=extent,
                     add_inset=add_inset,
                 )
                 plot = view.pcolormesh(gx, gy, img, cmap=cmap, norm=norm)
