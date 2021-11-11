@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 
 import click
+from rich import print as rprint
 
 from .__init__ import __version__
 from .geochem import LoadAndFilter, make_sarig_element_dataset, sarig_long_to_wide
@@ -81,15 +82,15 @@ def show_config(_: Info):
     """Display the user configuration."""
     # configuration = config.config.__str__()
     click.secho("COLUMN_NAMES", fg="blue", bold=True)
-    click.secho(config.column_names, fg="red")
+    rprint(config.column_names)
     click.secho("PLACES", fg="blue", bold=True)
-    click.secho(config.places, fg="red")
+    rprint(config.places)
     click.secho("EXTENT", fg="blue", bold=True)
-    click.secho(config.extent, fg="red")
+    rprint(config.extent)
     click.secho("PROJECTION", fg="blue", bold=True)
-    click.secho(config.projection, fg="red")
+    rprint(config.projection)
     click.secho("CRUSTAL_ABUND", fg="blue", bold=True)
-    click.secho(config.crustal_abund, fg="red")
+    rprint(config.crustal_abund)
 
 
 @cli.command()
@@ -130,7 +131,7 @@ def list_columns(_: Info, type_, path):
     click.secho(f"Dataset structure set to {type_}", fg="blue")
     if type_ == "sarig":
         dataset.load_sarig_data(path)
-        click.secho(dataset.list_columns(), fg="blue")
+        rprint(dataset.list_columns())
     else:
         click.secho(f"{type_} not implemented yet", fg="red")
 
@@ -151,7 +152,7 @@ def list_sample_types(_: Info, type_, path):
     click.secho(f"Dataset structure set to {type_}", fg="blue")
     if type_ == "sarig":
         dataset.load_sarig_data(path)
-        click.secho(dataset.list_sample_types(), fg="blue")
+        rprint(dataset.list_sample_types())
     else:
         click.secho(f"{type_} not implemented yet", fg="red")
 
@@ -236,17 +237,21 @@ def convert_long_to_wide(
     Optional flags:
     --dh_only, will filter dataset to only include samples with a
     drillhole_id.
+
     --add-units, will include measurement units in the output file.
+
     --add-methods, will export an additional file called sarig_wide_methods.csv
     which will include the determination methods for each sample and analyte.
 
     Note:
+
     Elements, sample types and drillholes must be entered with a single ',' between
     them and no spaces, e.g. Au,Cu,Pb.
     Sample types which contain spaces must be enclosed in '' and typed exactly as
     presented in the file, e.g. 'Drill core,Rock outcrop / float'
 
     Example usage:
+
     Filter data to just Cu and Au, only from drillholes and include the units:
 
     `$ pygt convert-long-to-wide -el Cu,Au --inc-units --dh-only data/sarig_rs_chem_exp.csv`
@@ -328,6 +333,7 @@ def extract_element(_: Info, path, element, dh_only, type_, out_path):
     drillhole_id.
 
     Example:
+
     extract three element datasets from drillholes only from input datafile
 
     `pygt extract-element /test_input.csv -el Au -el Cu -el Fe --dh-only -t sarig`
