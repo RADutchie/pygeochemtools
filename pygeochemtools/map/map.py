@@ -4,7 +4,6 @@
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 
-import warnings
 from typing import List, Union
 
 import matplotlib.pyplot as plt
@@ -15,10 +14,6 @@ try:
     import cartopy.feature as cfeature
     import cartopy.mpl as cmpl
 except ModuleNotFoundError:
-    warnings.warn(
-        "Cartopy module required for map plotting: https://scitools.org.uk/cartopy/docs/latest/installing.html#requirements",  # noqa: E501
-        ModuleNotFoundError,
-    )
     pass
 
 

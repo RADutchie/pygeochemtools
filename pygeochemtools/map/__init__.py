@@ -23,7 +23,7 @@ try:
 except ModuleNotFoundError:
     warnings.warn(
         "Cartopy module required for plotting: https://scitools.org.uk/cartopy/docs/latest/installing.html#requirements",  # noqa: E501
-        ModuleNotFoundError,
+        UserWarning,
     )
     pass
 

@@ -4,8 +4,6 @@
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 
-import warnings
-
 import numpy as np
 import pandas as pd
 from metpy.interpolate import interpolate_to_grid
@@ -13,10 +11,6 @@ from metpy.interpolate import interpolate_to_grid
 try:
     import cartopy.crs as ccrs
 except ModuleNotFoundError:
-    warnings.warn(
-        "Cartopy module required for plotting: https://scitools.org.uk/cartopy/docs/latest/installing.html#requirements",  # noqa: E501
-        ModuleNotFoundError,
-    )
     pass
 
 
