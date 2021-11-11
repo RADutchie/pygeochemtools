@@ -1,1 +1,1 @@
-recursive-include pygeochemtools/data/ *.csv *.yml
+graft pygeochemtools/data/
