@@ -55,19 +55,45 @@ def plot_max_downhole_chem(
     out_path: Optional[str] = None,
     add_inset: bool = False,
 ) -> None:
-    """[summary]#TODO
+    """Create a map plot of the maximum down hole geochemical values in a dataset.
+
+    .. warning::
+        Requires ``Cartopy`` to be installed to use.
+
+    This function takes either a DataFrame or a path to a valid csv file containing
+    a single element drillhole dataset. It will isolate the maximum value in each
+    drillhole, create a normalised to crustal abundance column and then create either
+    a point or interpolated grid map of the maximum values.
+
+    The map can be customised to different locations and projections by editing the
+    user configuration file projection, extent and places.
 
     Args:
-        input_data (str, pd.DataFrame): [description].
-        element (str): [description].
-        plot_type (str, optional): [description]. Defaults to "point".
-        projection (int, optional): [description]. Defaults to PROJECTION.
-        log_scale (bool, optional): [description]. Defaults to True.
-        out_path (str, optional): [description].
-        add_inset (bool, optional): [description]. Defaults to False.
+        input_data (Union[str, pd.DataFrame]): Path to clean and processed single
+            element dataset in csv format or Pandas dataframe of clean and processed
+            single element dataset.
+        element (str): The element to normalise, to retreive value from config file.
+        plot_type (str, optional): Either "point" or "interpolate. Defaults to "point".
+        projection (int, optional): Map projection to use inputted as epsg number, i.e.
+            3107 for GDA94/SA Lambert. See https://epsg.io for values.
+            Defaults to PROJECTION.
+        extent (List[int], optional): Map extents in correct values for projection. List
+            of values corresponding to [left, right, top, bottom].
+            Defaults to EXTENT.
+        places (List[List[Union[float, float, str]]], optional): Localities to include
+            on map plot with coordinates in appropriate values for he projection. List
+            of values corresponding to [latitude, longitude, label]. Defaults to PLACES.
+        log_scale (bool, optional): Wether to plot data on a log or linear scale.
+            Defaults to True.
+        out_path (Optional[str], optional): Optional path to place output file.
+            Defaults to None.
+        add_inset (bool, optional): Wether to include inset map. Defaults to False.
 
     Raises:
-        ValueError: Ensure input_data is a valid CSV file.
+        ValueError: Error if input file is not a valid csv file
+
+    Output:
+        Map file as .jpg file
     """
     if cartopy_installed:
         if isinstance(input_data, str):
@@ -189,7 +215,8 @@ def plot_max_downhole_chem(
         plt.close()
 
     else:
-        logger.info("Function not avaliable. Install Cartopy to use")
+        logger.warning("Function not avaliable. Install Cartopy to use")
+        print("Cartopy not installed")
 
 
 def plot_max_downhole_interval(
@@ -204,21 +231,47 @@ def plot_max_downhole_interval(
     out_path: Optional[str] = None,
     add_inset: bool = False,
 ) -> None:
-    """[summary]#TODO
+    """Plot of the maximum down hole geochemical values per interval in a dataset.
+
+    .. warning::
+        Requires ``Cartopy`` to be installed to use.
+
+    This function takes either a DataFrame or a path to a valid csv file containing
+    a single element drillhole dataset. It will isolate the maximum value for each
+    interval in each drillhole, create a normalised to crustal abundance column and
+    then create either a point or interpolated grid map of the maximum values.
+
+    The map can be customised to different locations and projections by editing the
+    user configuration file projection, extent and places.
 
     Args:
-        input_data (str, optional): [description]. Defaults to None.
-        df (pd.DataFrame, optional): [description]. Defaults to None.
-        element (str, optional): [description]. Defaults to None.
-        interval (int, optional): [description]. Defaults to 10.
-        plot_type:str="point".
-        projection (int, optional): [description]. Defaults to PROJECTION.
-        log_scale (bool, optional): [description]. Defaults to True.
-        out_path (str, optional): [description]. Defaults to None.
-        add_inset (bool, optional): [description]. Defaults to False.
+        input_data (Union[str, pd.DataFrame]): Path to clean and processed single
+            element dataset in csv format or Pandas dataframe of clean and processed
+            single element dataset.
+        element (str): The element to normalise, to retreive value from config file.
+        interval (int, optional): The interval to aggregate over down hole.
+            Defaults to 10.
+        plot_type (str, optional): Either "point" or "interpolate. Defaults to "point".
+        projection (int, optional): Map projection to use inputted as epsg number, i.e.
+            3107 for GDA94/SA Lambert. See https://epsg.io for values.
+            Defaults to PROJECTION.
+        extent (List[int], optional): Map extents in correct values for projection. List
+            of values corresponding to [left, right, top, bottom].
+            Defaults to EXTENT.
+        places (List[List[Union[float, float, str]]], optional): Localities to include
+            on map plot with coordinates in appropriate values for he projection. List
+            of values corresponding to [latitude, longitude, label]. Defaults to PLACES.
+        log_scale (bool, optional): Wether to plot data on a log or linear scale.
+            Defaults to True.
+        out_path (Optional[str], optional): Optional path to place output file.
+            Defaults to None.
+        add_inset (bool, optional): Wether to include inset map. Defaults to False.
 
     Raises:
-        ValueError: [description]
+        ValueError: Error if input file is not a valid csv file
+
+    Output:
+        Map file as .jpg file
     """
     if cartopy_installed:
         if isinstance(input_data, str):
@@ -368,4 +421,5 @@ def plot_max_downhole_interval(
                 plt.savefig(out_fig, dpi=300, bbox_inches="tight")
                 plt.close()
             else:
-                logger.info("Function not avaliable. Install Cartopy to use")
+                logger.warning("Function not avaliable. Install Cartopy to use")
+                print("Cartopy not installed")

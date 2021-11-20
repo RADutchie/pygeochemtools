@@ -4,8 +4,6 @@
 """
 .. currentmodule:: test_create_dataset
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
-
-This is a sample test module. #TODO update
 """
 
 import pytest
@@ -19,10 +17,6 @@ from pygeochemtools.geochem import (
     convert_ppm,
     handle_BDL,
 )
-
-"""
-#TODO update docs
-"""
 
 
 def test_clean_dataset():

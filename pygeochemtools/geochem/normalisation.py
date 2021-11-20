@@ -12,17 +12,21 @@ from ..utils import config
 def normalise_crustal_abundace(
     df: pd.DataFrame, element: str, ppm_column_name: str
 ) -> pd.DataFrame:
-    """Create a column with ppm values normalised against average crusta abundance.
+    """Create a column with ppm element values normalised against average crusta abundance.
 
     Uses the average crustal abundance values of Rudnick and Gao, 2004.
 
+    .. note::
+        Must be an elemental value and not an oxide. New elements can be added to the
+        config file.
+
     Args:
-        df (pd.DataFrame): [description]#TODO
-        element (str): [description]
-        ppm_column_name (str): [Desc]
+        df (pd.DataFrame): Dataframe containing elemental ppm values to normalise.
+        element (str): The element to normalise, to retreive value from config file.
+        ppm_column_name (str): Column headder containing the ppm values to normalise.
 
     Returns:
-        pd.DataFrame: [description]
+        pd.DataFrame: Dataframe with Normalised_crustal_abund_(ppm) column added.
     """
     df = df
     try:

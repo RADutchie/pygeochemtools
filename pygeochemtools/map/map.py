@@ -28,18 +28,22 @@ def SA_base_map(
     """Create default map for plotting.
 
     Args:
-        title (str): [description]
-        inset_title (str): [description]
-        projection (int, optional): [description].
-        add_inset (bool, optional): [description]. Defaults to True.
-        extent (list[int], optional): [description].
-        places (list[list[float, float, str]], optional): [description].
+        title (str): Title for map
+        inset_title (str): Inset map title
+        projection (int, optional): Map projection to use inputted as epsg number, i.e.
+            3107 for GDA94/SA Lambert. See https://epsg.io for values.
+        add_inset (bool, optional): Wether to include inset map. Defaults to True.
+        extent (list[int], optional): Map extents in correct values for projection. List
+            of values corresponding to [left, right, top, bottom].
+        places (list[list[float, float, str]], optional): Localities to include on map
+            plot with coordinates in appropriate values for he projection. List of
+            values corresponding to [latitude, longitude, label].
 
     Returns:
         tuple containing
-        - fig (matplotlib.pyplot.figure): [description]
-        - view (matplotlib.axes.Axes): [desc]
-        - inset (matplotlib.axes.Axes): [desc]
+        - fig (matplotlib.pyplot.figure): matplotlib figure object.
+        - view (matplotlib.axes.Axes): matplotlib axes object for main map.
+        - inset (matplotlib.axes.Axes): matplotlib axes object for inset map
     """
     proj = ccrs.epsg(projection)
     fig = plt.figure(figsize=(10, 11))

@@ -25,7 +25,7 @@ def max_dh_chem(
         drillhole_id (str): drillhole identifier in dataset.
 
     Raises:
-        ValueError: [description]
+        ValueError: Error raised if input file is not a valid csv file
 
     Returns:
         pd.DataFrame: Dataframe containing only the maximum value from each drill hole
@@ -51,24 +51,26 @@ def max_dh_chem_interval(
     start_depth_label: str,
     end_depth_label: str,
 ) -> pd.DataFrame:
-    """Function to aggregate the processed elemental geochemical data and
+    """Function to aggregate the processed singel elemental geochemical data and
     return a dataframe containing max value in each interval down hole for each
-    drillhole. # TODO finish docs
+    drillhole.
 
     Requires long format data.
 
     Args:
-        input_data (Union[str, pd.DataFrame]): [description]
-        interval (int): [description]
-        drillhole_id (str): [description]
-        start_depth_label (str): [description]
-        end_depth_label (str): [description]
+        input_data (Union[str, pd.DataFrame]): Input single element geochemical data,
+            in long form, as either a path to a csv input file or a pandas dataframe.
+        interval (int): The interval, in whole meters, overwhich to aggregate down hole.
+        drillhole_id (str): Column headder containing the drill hole identifier.
+        start_depth_label (str): Column headder containing the start or from depth data.
+        end_depth_label (str): Column headder containing the finish or to depth data.
 
     Raises:
-        ValueError: [description]
+        ValueError: Error if input file is not a valid csv file
 
     Returns:
-        pd.DataFrame: [description]
+        pd.DataFrame: Dataframe continging the maximum value for each specified
+            interval.
     """
 
     if isinstance(input_data, str):

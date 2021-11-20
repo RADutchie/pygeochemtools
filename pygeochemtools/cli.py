@@ -336,7 +336,7 @@ def extract_element(_: Info, path, element, dh_only, type_, out_path):
 
     extract three element datasets from drillholes only from input datafile
 
-    `pygt extract-element /test_input.csv -el Au -el Cu -el Fe --dh-only -t sarig`
+    `$ pygt extract-element /test_input.csv -el Au -el Cu -el Fe --dh-only -t sarig`
     """  # noqa: E501
     click.secho(f"Dataset structure set to {type_}", fg="red")
     if type_ == "sarig":
@@ -381,15 +381,24 @@ def extract_element(_: Info, path, element, dh_only, type_, out_path):
     help="Optional path to place output file, defaults to current working directory",
 )
 @click.option(
-    "-i",
     "--add-inset",
-    default=False,
+    is_flag=True,
     help="Optional flag to add inset map with drillhole locations",
 )
 def plot_max_downhole(_: Info, path, element, plot_type, scale, out_path, add_inset):
     """Plot maximum downhole geochemical values map
 
-    Requires path to extracted single element data file and element.
+    Requires path to extracted single element data file and element to plot.
+
+    NOTE: The element needs to be the element name, not an oxide, i.e. Fe for Fe2O3
+
+    NOTE: Must have Cartopy library installed to use.
+
+    Example:
+
+    Create an interpolated plot for maximum Cu values down hole with inset map:
+
+    `$ pygt plot-max-downhole -t interpolate --add-inset path/to/Cu_processed.csv Cu`
     """
     click.secho(f"Map output set to {plot_type}", fg="red")
     if plot_type == "point":
@@ -443,9 +452,8 @@ def plot_max_downhole(_: Info, path, element, plot_type, scale, out_path, add_in
     help="Optional path to place output file, defaults to current working directory",
 )
 @click.option(
-    "-i",
     "--add-inset",
-    default=False,
+    is_flag=True,
     help="Optional flag to add inset map with drillhole locations",
 )
 def plot_max_downhole_intervals(
@@ -455,6 +463,18 @@ def plot_max_downhole_intervals(
 
     Requires path to extracted single element data file, element and interval. The
     interval should be in whole meters as an integer.
+
+    NOTE: The element needs to be the element name, not an oxide, i.e. Fe for Fe2O3
+
+    NOTE: Must have Cartopy library installed to use.
+
+    Example:
+
+    Create a point plot for maximum Fe values every 20m down hole with inset map, from
+    Fe2O3 data with linear scale:
+
+    `$ pygt plot-max-downhole-intervals -t point --add-inset -s False
+    path/to/Fe2O3_processed.csv Fe 20`
     """
     click.secho(f"Map output set to {plot_type}", fg="red")
     if plot_type == "point":

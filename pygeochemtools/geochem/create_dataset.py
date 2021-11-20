@@ -1,9 +1,10 @@
 """Functions to load and filter input geochem data
 
-.. currentmodule:: pygeochemtools.create_dataset
+.. currentmodule:: pygeochemtools.geochem.create_dataset
 .. moduleauthor:: Rian Dutch <riandutch@gmail.com>
 """
 
+import importlib.resources as pkg_resources
 from pathlib import Path
 from typing import List, Optional, Union
 
@@ -24,7 +25,6 @@ def clean_dataset(
     Args:
         df (pd.DataFrame): Input dataframe to clean.
         value (str): Name of column containing geochemical data values.
-            Defaults to 'VALUE'.
         dash_BDL_indicator (bool): Indicator if the '-' sign indicates below
             detection limits or not. Defaults to False.
 
@@ -53,11 +53,13 @@ def clean_dataset(
 def handle_BDL(df: pd.DataFrame, units: str) -> pd.DataFrame:
     """Convert below detection limit values to low, non-zero values.
 
-    Converts non-numeric values like "<10" to low numeric ppm values. All BDL units
-    are converted to a value of 0.001ppm except ppb values which are converted to
-    0.00001ppm.
+    Converts below detection limit values, like "<10", to low numeric ppm values.
+    All BDL units are converted to a value of 0.001ppm except ppb values which are
+    converted to 0.00001ppm.
 
-    Requires clean_dataset() function to be run to create the "BDL" flag column first.
+    .. note::
+        Requires clean_dataset() function to be run to create the "BDL" flag column
+        first.
 
     Args:
         df (pd.DataFrame): Input dataframe to clean.
@@ -94,12 +96,6 @@ def add_sarig_chem_method(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: Dataframe with 'CHEM_METHODE_CODE mapped to three new columns:
         'DETERMINATION', 'DIGESTION' and 'FUSION'
     """
-    try:
-        import importlib.resources as pkg_resources
-    except ImportError:
-        # Try backported to PY<37 `importlib_resources`.
-        import importlib_resources as pkg_resources  # noqa
-
     from .. import data  # relative-import the *package* containing the templates
 
     stream = pkg_resources.open_text(data, "sarig_method_code_map.csv")
@@ -132,8 +128,9 @@ class LoadAndFilter:
 
         This function uses dask to handle very large input datasets.
 
-        Important note: the the sarig_rs_chem_exp.csv data is in a long format, with
-        each individual analysis as a single row!
+        .. warning::
+            The the sarig_rs_chem_exp.csv data is in a long format, with
+            each individual analysis as a single row!
 
         Args:
             path (str): Path to main sarig_rs_chem_exp.csv input file.
@@ -173,7 +170,7 @@ class LoadAndFilter:
         Args:
             path (str): Path to input csv file.
         """
-        pass
+        print("function not implemented yet")
 
     def list_columns(self):
         """Return the column headers from the dataset"""

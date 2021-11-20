@@ -15,18 +15,24 @@ def long_to_wide(
     units: str,
     include_units: bool = False,
 ) -> pd.DataFrame:
-    """[summary]# TODO convert SARIG long to wide
+    """Convert geochemical data tables from long to wide form.
+
+    This function takes a dataframe of long form geochemical data, i.e. data with one
+    row per element, and converts it to a standard wide form data with one row per
+    sample and each element in a separate column.
 
     Args:
-        df (pd.DataFrame): [description]
+        df (pd.DataFrame): Dataframe containing long form data.
         sample_id (str): Name of column containing sample ID's.
         element_id (str): Name of column containing geochemical element names.
         value (str): Name of column containing geochemical data values.
         units (str): Name of column containing geochemical data units.
-        include_units (bool, optional): [description]. Defaults to False.
+        include_units (bool, optional): Wether to include units in the output. Defaults
+            to False.
 
     Returns:
-        pd.DataFrame: [description]
+        pd.DataFrame: Dataframe converted to wide table format with one sample per row
+        and columns for each element.
     """
     df = df
     df = df.drop_duplicates(subset=[sample_id, element_id])
@@ -66,8 +72,22 @@ def long_to_wide(
 
 def sarig_methods_wide(
     df: pd.DataFrame, sample_id: str, element_id: str,
-):
-    """[summary] # TODO create method wide table, needs to have mapping applied before
+) -> pd.DataFrame:
+    """Create a corresponding methods table to match the pivoted wide form data.
+
+    .. note::
+        This requires the input dataframe to already have had methods mapping applied
+        by running ``pygeochemtools.geochem.create_dataset.add_sarig_chem_method``
+        function.
+
+    Args:
+        df (pd.DataFrame): Dataframe containing long form data.
+        sample_id (str): Name of column containing sample ID's.
+        element_id (str): Name of column containing geochemical element names.
+
+    Returns:
+        pd.DataFrame: Dataframe with mapped geochemical methods converted to wide form
+            with one method per sample.
     """
     ...
     df = df
