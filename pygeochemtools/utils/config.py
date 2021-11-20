@@ -26,21 +26,14 @@ class Config:
     def get_config(self):
         """Read config.
 
-        Loads user config from either the default_config.yml file or the
-        user provided config.yml file. Config file located in the
+        Loads user config from the user_config.yml located in the
         pygeochemtools.data module
         """
-        try:
-            # read config and store in _config
-            with pkg_resources.open_text(data, "config.yml") as c:
-                self._config = yaml.load(c, Loader=yaml.FullLoader)
-                return self._config
 
-        except FileNotFoundError:
-            logger.info("Using default config")
-            with pkg_resources.open_text(data, "default_config.yml") as c:
-                self._config = yaml.load(c, Loader=yaml.FullLoader)
-                return self._config
+        # read config and store in _config
+        with pkg_resources.open_text(data, "user_config.yml") as c:
+            self._config = yaml.load(c, Loader=yaml.FullLoader)
+            return self._config
 
     @property
     def column_names(self):
@@ -70,7 +63,7 @@ class Config:
     @property
     def path_to_config(self):
         """Return path to configuration file"""
-        return os.path.join(data.__path__[0], "config.yml")
+        return os.path.join(data.__path__[0], "user_config.yml")
 
 
 config = Config()

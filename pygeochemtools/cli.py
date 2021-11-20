@@ -12,7 +12,7 @@ import os
 from pathlib import Path
 
 import click
-from rich import print as rprint
+from rich.pretty import pprint as rprint
 
 from .__init__ import __version__
 from .geochem import LoadAndFilter, make_sarig_element_dataset, sarig_long_to_wide
@@ -81,16 +81,16 @@ def cli(info: Info, verbose: int):
 def show_config(_: Info):
     """Display the user configuration."""
     # configuration = config.config.__str__()
-    click.secho("COLUMN_NAMES", fg="blue", bold=True)
-    rprint(config.column_names)
-    click.secho("PLACES", fg="blue", bold=True)
-    rprint(config.places)
-    click.secho("EXTENT", fg="blue", bold=True)
-    rprint(config.extent)
-    click.secho("PROJECTION", fg="blue", bold=True)
-    rprint(config.projection)
-    click.secho("CRUSTAL_ABUND", fg="blue", bold=True)
-    rprint(config.crustal_abund)
+    click.secho("COLUMN_NAMES", fg="red", bold=True)
+    rprint(config.column_names, indent_guides=False)
+    click.secho("PLACES", fg="red", bold=True)
+    rprint(config.places, indent_guides=False)
+    click.secho("EXTENT", fg="red", bold=True)
+    rprint(config.extent, indent_guides=False)
+    click.secho("PROJECTION", fg="red", bold=True)
+    rprint(config.projection, indent_guides=False)
+    click.secho("CRUSTAL_ABUND", fg="red", bold=True)
+    rprint(config.crustal_abund, indent_guides=False)
 
 
 @cli.command()
@@ -128,10 +128,10 @@ def version():
 def list_columns(_: Info, type_, path):
     """Display the column headers in the loaded dataset"""
     dataset = LoadAndFilter()
-    click.secho(f"Dataset structure set to {type_}", fg="blue")
+    click.secho(f"Dataset structure set to {type_}", fg="red")
     if type_ == "sarig":
         dataset.load_sarig_data(path)
-        rprint(dataset.list_columns())
+        rprint(dataset.list_columns(), indent_guides=False)
     else:
         click.secho(f"{type_} not implemented yet", fg="red")
 
@@ -149,10 +149,10 @@ def list_columns(_: Info, type_, path):
 def list_sample_types(_: Info, type_, path):
     """Display the sample types listed in the sample type column"""
     dataset = LoadAndFilter()
-    click.secho(f"Dataset structure set to {type_}", fg="blue")
+    click.secho(f"Dataset structure set to {type_}", fg="red")
     if type_ == "sarig":
         dataset.load_sarig_data(path)
-        rprint(dataset.list_sample_types())
+        rprint(dataset.list_sample_types(), indent_guides=False)
     else:
         click.secho(f"{type_} not implemented yet", fg="red")
 
@@ -170,10 +170,10 @@ def list_sample_types(_: Info, type_, path):
 def list_elements(_: Info, type_, path):
     """Display the list of element labels in dataset"""
     dataset = LoadAndFilter()
-    click.secho(f"Dataset structure set to {type_}", fg="blue")
+    click.secho(f"Dataset structure set to {type_}", fg="red")
     if type_ == "sarig":
         dataset.load_sarig_data(path)
-        click.secho(dataset.list_elements(), fg="blue")
+        click.secho(dataset.list_elements(), fg="green")
     else:
         click.secho(f"{type_} not implemented yet", fg="red")
 
@@ -338,7 +338,7 @@ def extract_element(_: Info, path, element, dh_only, type_, out_path):
 
     `pygt extract-element /test_input.csv -el Au -el Cu -el Fe --dh-only -t sarig`
     """  # noqa: E501
-    click.secho(f"Dataset structure set to {type_}", fg="blue")
+    click.secho(f"Dataset structure set to {type_}", fg="red")
     if type_ == "sarig":
         with click.progressbar(element) as bar:
             for e in bar:
@@ -391,7 +391,7 @@ def plot_max_downhole(_: Info, path, element, plot_type, scale, out_path, add_in
 
     Requires path to extracted single element data file and element.
     """
-    click.secho(f"Map output set to {plot_type}", fg="blue")
+    click.secho(f"Map output set to {plot_type}", fg="red")
     if plot_type == "point":
         plot_max_downhole_chem(
             input_data=path,
@@ -456,7 +456,7 @@ def plot_max_downhole_intervals(
     Requires path to extracted single element data file, element and interval. The
     interval should be in whole meters as an integer.
     """
-    click.secho(f"Map output set to {plot_type}", fg="blue")
+    click.secho(f"Map output set to {plot_type}", fg="red")
     if plot_type == "point":
         plot_max_downhole_interval(
             input_data=path,

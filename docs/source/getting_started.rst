@@ -41,6 +41,10 @@ Alternatively, if you use Anaconda, you can install Cartopy using conda.
 
     conda install -c conda-forge cartopy
 
+.. note::
+
+    If you don't have ``Cartopy`` installed, you will see a warning message when using the CLI and will not be able to use the plotting functions
+
 Building from source
 ---------------------
 
