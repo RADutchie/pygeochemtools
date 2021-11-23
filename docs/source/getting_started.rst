@@ -5,7 +5,7 @@
 .. _getting_started:
 
 ***************
-Getting Started
+Getting started
 ***************
 
 Installing the Library
@@ -35,7 +35,7 @@ You can then install ``pygeochemtools``, including ``Cartopy`` with pip.
 
     pip install pygeochemtools[cartopy]
 
-Alternatively, if you use Anaconda, you can install Cartopy using conda.
+Alternatively, if you use `Anaconda <https://www.anaconda.com/>`_, you can install Cartopy using conda. This may be the easiest option if you are on a windows system.
 
 .. code-block:: bash
 

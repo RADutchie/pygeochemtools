@@ -334,7 +334,7 @@ def plot_max_downhole_interval(
                     else:
                         out_fig = (
                             out_path
-                            / f"Interpolated_max_downhole_{element}_{name}m.jpg"
+                            / f"Interpolated_max_downhole_{element}_{name}m.jpg"  # noqa
                         )
                 else:
                     out_path = Path.cwd()
@@ -343,7 +343,7 @@ def plot_max_downhole_interval(
                     else:
                         out_fig = (
                             out_path
-                            / f"Interpolated_max_downhole_{element}_{name}m.jpg"
+                            / f"Interpolated_max_downhole_{element}_{name}m.jpg"  # noqa
                         )
 
                 # plot

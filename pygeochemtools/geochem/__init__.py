@@ -54,7 +54,7 @@ def make_sarig_element_dataset(
         path (str): Path to main sarig_rs_chem_exp.csv input file.
         element (str): The element to extract and create a sub-dataset of.
         export (bool): Wether to export a csv version of the element dataset.
-        Defaults to False.
+            Defaults to False.
         out_path (str, optional): Path to place out put file. Defaults to path.
 
     Returns:
@@ -111,7 +111,8 @@ def sarig_long_to_wide(
             Defaults to path.
 
     Returns:
-        pd.DataFrame: [description]
+        pd.DataFrame: Dataframe with filtered datapoints converted to a wide form data
+            structure.
     """
     dataset = LoadAndFilter()
     dataset.load_sarig_data(path)
