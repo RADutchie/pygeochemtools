@@ -31,12 +31,13 @@ def normalise_crustal_abundace(
     df = df
     try:
         norm_val = config.crustal_abund[element]
+
+        df["Normalised_crustal_abund_(ppm)"] = df[ppm_column_name].apply(
+            lambda x: x / norm_val
+        )
     except KeyError:
         print(
             f"Element {element} does not have a crustal abundance value in the config.yml file"  # noqa: E501
         )
-    df["Normalised_crustal_abund_(ppm)"] = df[ppm_column_name].apply(
-        lambda x: x / norm_val
-    )
 
     return df

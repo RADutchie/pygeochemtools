@@ -284,7 +284,7 @@ def plot_max_downhole_interval(
             df = input_data
 
         df = max_dh_chem_interval(
-            processed_data=df,
+            input_data=df,
             interval=interval,
             drillhole_id=DH_ID,
             start_depth_label=START_DEPTH,

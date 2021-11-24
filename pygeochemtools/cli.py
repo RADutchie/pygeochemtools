@@ -247,8 +247,8 @@ def convert_long_to_wide(
 
     Elements, sample types and drillholes must be entered with a single ',' between
     them and no spaces, e.g. Au,Cu,Pb.
-    Sample types which contain spaces must be enclosed in '' and typed exactly as
-    presented in the file, e.g. 'Drill core,Rock outcrop / float'
+    Sample types which contain spaces must be enclosed in double quotes " " and typed exactly as
+    presented in the file, e.g. "Drill core,Rock outcrop / float"
 
     Example usage:
 
@@ -259,7 +259,7 @@ def convert_long_to_wide(
     Filter data to just Cu, Fe and Pb analytes, only from Drill core and Soil samples, and include both units and
     export the methods as well:
 
-    `$ pygt convert-long-to-wide -el Cu,Fe,Pb -st 'Drill core,Soil' --inc-units --inc-methods data/sarig_rs_chem_exp.csv`
+    `$ pygt convert-long-to-wide -el Cu,Fe,Pb -st "Drill core,Soil" --inc-units --inc-methods data/sarig_rs_chem_exp.csv`
     """  # noqa: E501
     # Convert click str input into list of str
     if isinstance(elements, str):
