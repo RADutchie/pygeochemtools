@@ -11,7 +11,9 @@ Getting started
 Installing the Library
 ======================
 
-You can use pip to install ``pygeochemtools`` into a new virtual environment.
+``pygeochemtools`` requires Python version 3.8 or greater.
+
+You can use pip to install ``pygeochemtools`` into a new virtual environment. 
 
 .. code-block:: bash
 
