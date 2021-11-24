@@ -32,11 +32,11 @@ Functionality
 ---------------
 
 Currently *pygeochemtools* provides the following functionality:
-   * Filter large datasets based on a list of elements, sample type or drillhole numbers (or a combination of all three) and convert from long to wide format.
-   * Add detailed geochemical methods columns onto the SARIG geochemical dataset.
-   * Extract single element datasets from large geochemical datasets.
-   * Plot maximum down hole geochemical data maps.
-   * Plot maximum down hole chemistry per interval geochemical data maps.
+   - Filter large datasets based on a list of elements, sample type or drillhole numbers (or a combination of all three) and convert from long to wide format.
+   - Add detailed geochemical methods columns onto the SARIG geochemical dataset.
+   - Extract single element datasets from large geochemical datasets.
+   - Plot maximum down hole geochemical data maps.
+   - Plot maximum down hole chemistry per interval geochemical data maps.
 
 .. note::
 
@@ -47,9 +47,9 @@ Future Functionality
 ---------------------
 
 Future additions to *pygeochemtools* will include:
-   * The ability to load and transform generic geochemical data in long format, not specifically the SARIG data structure.
-   * A data QA/QC function to generate accuracy and precision metrics on commercial lab data.
-   * Other suggestions people may have?
+   - The ability to load and transform generic geochemical data in long format, not specifically the SARIG data structure.
+   - A data QA/QC function to generate accuracy and precision metrics on commercial lab data.
+   - Other suggestions people may have?
 
 To install *pygeochemtools*, visit the :ref:`getting_started` page and then have a look at the :ref:`usage` page
 and the :ref:`examples` page to see how to use pygeochemtools.

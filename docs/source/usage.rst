@@ -117,11 +117,11 @@ User configuration
 In order to allow for some generalities and greater user control on the command line, ``pygeochemtools`` has a user configuration file
 to pre-set a number of variables. This includes:
 
-    * Setting column header names (This one is important for using different datasets, in the format 'variable_name': 'equivalent name in dataset')
-    * Map place names and locations to annotate map output (latitude, longitude, label in decimal degrees) 
-    * Map extents (west, east, south, north in decimal degrees)
-    * Map projection (EPSG number for your projection from `<https://epsg.io>`_)
-    * Average crustal abundance values for data normalisations
+    - Setting column header names (This one is important for using different datasets, in the format 'variable_name': 'equivalent name in dataset')
+    - Map place names and locations to annotate map output (latitude, longitude, label in decimal degrees) 
+    - Map extents (west, east, south, north in decimal degrees)
+    - Map projection (EPSG number for your projection from `<https://epsg.io>`_)
+    - Average crustal abundance values for data normalisations
 
 At runtime, ``pygeochemtools`` looks for the ``user_config.yml`` file, reads the config and applies the values.
 

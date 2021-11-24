@@ -11,7 +11,7 @@ Survey of South Australia, but will easily handle other datasets with a little b
 Why *pygeochemtools*
 ----------------------
 
-The SA Geodata database (available via the `SARIG <https://map.sarig.sa.gov.au/>`_ portal) contains over 10 Gb of geochemical data.
+The SA Geodata database (available via the [SARIG](https://map.sarig.sa.gov.au/) portal) contains over 10 Gb of geochemical data.
 That’s a lot of chemistry. Explorers often request extracts of this data set, but then find it a challenge to handle all that data.
 Because of the size and amount of data, programs like Excel wont even open the file, and if the extract is small enough to open,
 explorers often find the format of the data a challenge. Generally, people like to use wide data for analysis, where each row in a
