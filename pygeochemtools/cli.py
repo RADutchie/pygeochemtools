@@ -487,6 +487,10 @@ def plot_max_downhole_intervals(
             out_path=out_path,
             add_inset=add_inset,
         )
+        if out_path:
+            click.echo(f"File will output to {out_path}")
+        else:
+            click.echo(f"File will output to {Path.cwd()}")
 
     elif plot_type == "interpolate":
         plot_max_downhole_interval(
@@ -498,10 +502,10 @@ def plot_max_downhole_intervals(
             out_path=out_path,
             add_inset=add_inset,
         )
+        if out_path:
+            click.echo(f"File will output to {out_path}")
+        else:
+            click.echo(f"File will output to {Path.cwd()}")
+
     else:
         click.secho(f"{plot_type} not implemented", fg="red")
-
-    if out_path:
-        click.echo(f"File written to {out_path}")
-    else:
-        click.echo(f"File written to {Path.cwd()}")
