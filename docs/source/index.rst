@@ -17,13 +17,13 @@ Why *pygeochemtools*
 
 The SA Geodata database (available via the `SARIG <https://map.sarig.sa.gov.au/>`_ portal data catalogue `here <https://catalog.sarig.sa.gov.au/geonetwork/srv/eng/catalog.search#/metadata/e02583a8-c167-48b4-b6ce-d7acb12418a0>`_)
 contains over 10 Gb of geochemical data. That’s a lot of chemistry. Explorers often request extracts of this data set, but then find it a challenge to handle all that data.
-Because of the size and amount of data, programs like Excel wont even open the file, and if the extract is small enough to open,
+Because of the size and amount of data, programs like Excel won't even open the file, and if the extract is small enough to open,
 explorers often find the format of the data a challenge. Generally, people like to use wide data for analysis, where each row in a
 table represents all the data about a single sample. But database exports are in a long format where each row represents a single data point.
 
 *Pygeochemtools* provides an abstraction and cli to make loading, filtering and restructuring this data easy. It uses python libraries
 like dask and pandas under the hood to be able to deal with 'larger than memory' datasets, so you can load and filter those large datasets
-and then output something more easy to handle with Excel or other tools.
+and then output something easier to handle with Excel or other tools.
 
 *Pygeochemtools* is not a geochemical data analysis tool. For that I'd suggest tools like `pyrolite <https://github.com/morganjwilliams/pyrolite>`_ or
 checking out the list of other amazing open source geoscience projects compiled by `Software Underground <https://github.com/softwareunderground/awesome-open-geoscience>`_. 
