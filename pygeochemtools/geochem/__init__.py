@@ -24,6 +24,7 @@ SAMPLE_TYPE = config.column_names["sample_type"]
 ELEMENT = config.column_names["element"]
 DH_ID = config.column_names["drillhole_id"]
 SAMPLE_ID = config.column_names["sample_no"]
+ANALYSIS_ID = config.column_names["analysis_no"]
 
 
 def make_sarig_element_dataset(
@@ -96,6 +97,11 @@ def sarig_long_to_wide(
     large dataset based on these inputs. Has the option to include or exclude units
     with the values. Can also export an additional methods file.
 
+    It handles duplicate values based on sample_id and element_id by taking the first
+    duplicate value initially, then catching the second duplicate, performing a second
+    pivot, and appengind the duplicates to the final table. It does not handle duplicate
+    duplicates, in which case it will return only the first value.
+
     Args:
         path (str): Path to main sarig_rs_chem_exp.csv input file.
         elements (Optional[List[str]]): List of elements to filter dataset to.
@@ -120,9 +126,8 @@ def sarig_long_to_wide(
     filtered_data = dataset.sarig_filter(
         elements=elements, sample_type=sample_type, drillholes=drillholes
     )
-    filtered_metadata = filtered_data.drop_duplicates(subset=[SAMPLE_ID]).drop(
+    filtered_metadata = filtered_data.drop_duplicates(subset=[ANALYSIS_ID]).drop(
         columns=[
-            "SAMPLE_ANALYSIS_NO",
             "OTHER_ANALYSIS_ID",
             "ANALYSIS_TYPE_DESC",
             "LABORATORY",
@@ -136,22 +141,22 @@ def sarig_long_to_wide(
 
     wide_vals = long_to_wide(
         filtered_data,
-        sample_id=SAMPLE_ID,
+        sample_id=ANALYSIS_ID,
         element_id=ELEMENT,
         value=VALUE,
         units=UNITS,
         include_units=include_units,
     )
 
-    wide_data_out = filtered_metadata.merge(wide_vals, how="inner", on=SAMPLE_ID)
+    wide_data_out = filtered_metadata.merge(wide_vals, how="inner", on=ANALYSIS_ID)
 
     if export_methods:
         filtered_data = add_sarig_chem_method(filtered_data)
         wide_methods = sarig_methods_wide(
-            filtered_data, sample_id=SAMPLE_ID, element_id=ELEMENT
+            filtered_data, sample_id=ANALYSIS_ID, element_id=ELEMENT
         )
         wide_methods_out = filtered_metadata.merge(
-            wide_methods, how="inner", on=SAMPLE_ID
+            wide_methods, how="inner", on=ANALYSIS_ID
         )
         export_dataset(
             wide_methods_out, label="sarig_wide_methods", path=path, out_path=out_path
