@@ -23,7 +23,7 @@ def long_to_wide(
 
     It handles duplicate values based on sample_id and element_id by taking the first
     duplicate value initially, then catching the second duplicate, performing a second
-    pivot, and appengind the duplicates to the final table. It does not handle duplicate
+    pivot, and appendind the duplicates to the final table. It does not handle duplicate
     duplicates, in which case it will return only the first value.
 
     Args:

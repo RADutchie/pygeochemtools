@@ -164,13 +164,27 @@ class LoadAndFilter:
             print("Unable to load from file. Make sure file is a correct .csv")
         self.loaded = True
 
-    def load_chem_data(self, path: str) -> None:
-        """Not implemented yet. Func to load generic datasets.
+    def load_chem_data(self, path: str, dtypes: dict = None) -> None:
+        """Load generic long or wide format data.
+
+        #TODO docs, instruction to call compute, requirement to explicitely call
+        dtypes if dask can't guess.
+        Catch dask dtype exception
 
         Args:
-            path (str): Path to input csv file.
+            path (str): [description]
+            dtypes (dict, optional): [description]. Defaults to None.
         """
-        print("function not implemented yet")
+        path = Path(path)
+        if path.is_file() and path.suffix == ".csv":
+            if dtypes:
+                self.ddf = dd.read_csv(path, dtype=dtypes)
+            else:
+                self.ddf = dd.read_csv(path)
+            print("Data loaded")
+        else:
+            print("Unable to load from file. Make sure file is a correct .csv")
+        self.loaded = True
 
     def list_columns(self):
         """Return the column headers from the dataset"""
@@ -269,6 +283,23 @@ class LoadAndFilter:
         if elements is not None:
             ddf_ = ddf_[ddf_["CHEM_CODE"].isin(elements)]
 
+        try:
+            return ddf_.compute()
+        except MemoryError:
+            print(
+                "Ran into a MemoryError, your dataset is probably still too big to \
+                fit in your avaliable memory"
+            )
+
+    def compute(self) -> pd.DataFrame:
+        """Compute dask dataframe and returns pandas dataframe if memory avaliable.
+
+        #TODO docs
+
+        Returns:
+            pd.DataFrame: [description]
+        """
+        ddf_ = self.ddf
         try:
             return ddf_.compute()
         except MemoryError:
